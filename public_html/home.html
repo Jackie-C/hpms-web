@@ -691,7 +691,21 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="margin-bottom-10 visible-sm"> </div>
+                                            <div class="col-md-6">
+                                                <div class="portlet light portlet-fit bordered">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="icon-settings font-red"></i>
+                                                            <span class="caption-subject font-red sbold uppercase">Pie Chart 1</span>
+                                                        </div>
+                                                        <div class="actions">
+                                                            <input type="checkbox" class="make-switch" checked data-on-color="info" data-off-color="success" data-size="small"> </div>
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div id="pie_chart" class="chart"> </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-3">
                                                 <!-- BEGIN WIDGET THUMB -->
                                                 <div class="widget-thumb widget-bg-color-white padding-top-0">
@@ -1303,6 +1317,29 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="assets/global/plugins/excanvas.min.js"></script> 
 <script src="assets/global/plugins/ie8.fix.min.js"></script> 
 <![endif]-->
+
+        <!--        <script type="text/javascript">
+        $(function () { 
+            var data = [
+                {label: "data1", data:10},
+                {label: "data2", data: 20},
+                {label: "data3", data: 30},
+                {label: "data4", data: 40},
+                {label: "data5", data: 50},
+                {label: "data6", data: 60},
+                {label: "data7", data: 70}
+            ];
+        
+            var options = {
+                    series: {
+                        pie: {show: true}
+                            }
+                 };
+        
+            $.plot($("#pie_chart"), data, options);  
+        });
+        </script>-->
+
         <!-- BEGIN CORE PLUGINS -->
         <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -1333,6 +1370,10 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/flot/jquery.flot.stack.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/flot/jquery.flot.crosshair.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/flot/jquery.flot.axislabels.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
