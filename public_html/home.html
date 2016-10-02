@@ -547,7 +547,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span data-counter="counterup" data-value="134">0</span>kWh 
+                                            <span id="currentEnergyUsage" data-counter="counterup" data-value="">0</span>kWh 
                                         </div>
                                         <div class="desc"> Current Energy Usage </div>
                                     </div>
@@ -560,7 +560,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span data-counter="counterup" data-value="261">0</span>kWh </div>
+                                            <span id="totalDailyEnergyUsage" data-counter="counterup" data-value="">0</span>kWh </div>
                                         <div class="desc"> Total Daily Energy Usage </div>
                                     </div>
                                 </a>
@@ -572,7 +572,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span data-counter="counterup" data-value="21">0</span>&#8451;
+                                            <span id="temperature" data-counter="counterup" data-value="">0</span>&#8451;
                                         </div>
                                         <div class="desc"> Temperature </div>
                                     </div>
@@ -585,7 +585,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span data-counter="counterup" data-value="24"></span>% </div>
+                                            <span id="humidity" data-counter="counterup" data-value=""></span>% </div>
                                         <div class="desc"> Humidity </div>
                                     </div>
                                 </a>
@@ -628,7 +628,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <div class="easy-pie-chart">
-                                                    <div class="number transactions" data-percent="85">
+                                                    <div class="number transactions" id="numberTransactions" data-percent="85">
                                                         <span>+85</span>% </div>
                                                     <a class="title" href="javascript:;"> Change in Monthly Consumption
                                                     </a>
@@ -645,7 +645,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                         <div class="tile-object">
                                             <div class="name">Daily Running Total</div>
-                                            <div class="number"> $32.42 </div>
+                                            <div class="number" id="dailyRunningTotal"> $32.42 </div>
                                         </div>
                                     </div>  
                                                 <!-- END WIDGET THUMB for Daily Cost -->
@@ -659,7 +659,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                         <div class="tile-object">
                                             <div class="name"> Largest Consumption </div>
-                                            <div class="number"> Television </div>
+                                            <div class="number" id="largestConsumption"> Television </div>
                                         </div>
                                     </div>      
                                            
@@ -675,7 +675,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                         <div class="tile-object">
                                             <div class="name"> Monthly Running Total </div>
-                                            <div class="number"> $32.42 </div>
+                                            <div class="number" id="monthlyRunningTotal"> $32.42 </div>
                                         </div>
                                     </div>      
                                             </div>
@@ -1348,6 +1348,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script src="assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
         <script src="assets/pages/scripts/charts-flotcharts.min.js" type="text/javascript"></script>
+        <script src="assets/pages/scripts/home.js" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
