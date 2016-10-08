@@ -465,25 +465,33 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <ul class="sub-menu">
                                     <li class="nav-item start ">
                                         <a href="currentenergy.html" class="nav-link ">
-                                            <i class="icon-bulb"></i>
+                                            <i class="fa fa-bolt"></i>
                                             <span class="title">Current Usage</span>
-                                            <span class="badge badge-success">314Kwh</span>
+                                            <span class="badge badge-success">101Kwh</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item start ">
+                                        <a href="previousenergy.html" class="nav-link ">
+                                            <i class="icon-hourglass"></i>
+                                            <span class="title">Previous Usage</span>
+                                            <span class="badge badge-danger">240Kwh</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item start ">
+                                        <a href="temperature.html" class="nav-link ">
+                                            <i class="icon-cloud-upload"></i>
+                                            <span class="title">Temperature</span>
+                                            <span class="badge badge-success">3°C</span>
                                         </a>
                                     </li>
                                     <li class="nav-item start ">
                                         <a href="humidity.html" class="nav-link ">
-                                            <i class="icon-bar-chart"></i>
+                                            <i class="icon-pointer"></i>
                                             <span class="title">Humidity</span>
-                                            <span class="badge badge-success">10%</span>
+                                            <span class="badge badge-danger">151%</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item start ">
-                                        <a href="Temperature.html" class="nav-link ">
-                                            <i class="icon-graph"></i>
-                                            <span class="title">Temperature</span>
-                                            <span class="badge badge-danger">24°C</span>
-                                        </a>
-                                    </li>
+                                    
                                 </ul>
                             </li>
                             <li class="nav-item  ">
@@ -515,20 +523,14 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="page-bar">
                             <ul class="page-breadcrumb">
                                 <li>
-                                    <a href="index.html">Home</a>
+                                    <a href="home.html">Home</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
                                     <span>Dashboard</span>
                                 </li>
                             </ul>
-                            <div class="page-toolbar">
-                                <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
-                                    <i class="icon-calendar"></i>&nbsp;
-                                    <span class="thin uppercase hidden-xs"></span>&nbsp;
-                                    <i class="fa fa-angle-down"></i>
-                                </div>
-                            </div>
+                            
                         </div>
                         <!-- END PAGE BAR -->
                         <!-- BEGIN PAGE TITLE-->
@@ -555,7 +557,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <a class="dashboard-stat dashboard-stat-v2 red" href="#">
                                     <div class="visual">
-                                        <i class="fa fa-line-chart"></i>
+                                        <i class="icon-hourglass"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
@@ -567,7 +569,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <a class="dashboard-stat dashboard-stat-v2 green" href="#">
                                     <div class="visual">
-                                        <i class="fa fa-cloud"></i>
+                                        <i class="icon-cloud-upload"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
@@ -580,7 +582,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
                                     <div class="visual">
-                                        <i class="fa fa-umbrella"></i>
+                                        <i class="icon-pointer"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
@@ -596,10 +598,29 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
+                                    <div class="portlet-title col-md-12">
+                                        <div class="caption col-md-1">
                                             <i class="icon-settings font-dark"></i>
                                             <span class="caption-subject font-dark sbold uppercase">Usage Trend</span>
+                                        </div>
+                                        <div class="graphbutton col-md-1">
+                                            <a href="javascript:;" id = "energybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
+                                                <i class="fa fa-bolt"></i> Energy </a>
+                                        </div>
+                                        <div class="graphbutton col-md-1">
+                                            <a href="javascript:;" id = "temperaturebutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
+                                                <i class="icon-cloud-upload"></i> Temperature </a>
+                                        </div>
+                                        <div class="graphbutton col-md-1">
+                                            <a href="javascript:;" id = "humiditybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload humiditybutton">
+                                                <i class="icon-pointer"></i> Humidity </a>
+                                        </div> 
+                                        <div class="page-toolbar">
+                                            <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+                                                <i class="icon-calendar"></i>&nbsp;
+                                                <span class="thin uppercase hidden-xs"></span>&nbsp;
+                                                <i class="fa fa-angle-down"></i>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
@@ -609,92 +630,73 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                         </div>
                         <!-- END DYNAMIC CHART PORTLET-->
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="portlet light bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="icon-cursor font-dark hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">General Stats</span>
-                                        </div>
-                                        <div class="actions">
-                                            <a href="javascript:;" class="btn btn-sm btn-circle red easy-pie-chart-reload">
-                                                <i class="fa fa-repeat"></i> Reload </a>
-                                        </div>
+                                                
+                        <div id = "bottomrow" class="row">
+                             
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">       
+                                <div  class="tile">
+                                    <div class="body">
+                                        <i class="fa fa-line-chart iconclass"></i>
                                     </div>
-                                    <div class="portlet-body">
-                                        <div class="row">
-                                            <div class="tiles">
-                                            
-                                                
-                                                
-                                                <div class="tile double bg-red-sunglo">
-                                                    <div  id="monthlyConsumption" class="easy-pie-chart">
-                                                    <div class="number transactions" id="numberTransactions" data-percent="85">
-                                                        <span>+85</span>% </div>                                                    
-                                                    </div>
-                                                    <div class="tile-object">
-                                                        <div class="name">Change in Monthly Consumption</div>
-                                                    </div>
+                                    <div class="desc valueclass">% Chart</div>
+                                    <div class="name nameclass" style="padding-left: 110px;">Change in Monthly Consumption</div>
+                                    
 
-                                                </div>  
-                                            
-                                            
-                                            
-                                            
-                                                    <!-- BEGIN Tile for Daily Cost-->
-                                                <div class="tile double bg-red-sunglo">
-                                                    <div class="tile-body">
-                                                        <i class="fa fa-clock-o"></i>
-                                                    </div>
-                                                    <div class="tile-object">
-                                                        <div class="name">Daily Running Total</div>
-                                                        <div class="number" id="dailyRunningTotal"> $32.42 </div>
-                                                    </div>
-                                                </div>  
-                                                
-                                                   
-                                                     <!-- BEGIN Tile for Largest Consumption-->
-                                            
-                                            
-                                                <div class="tile double bg-red-sunglo">
-                                                    <div class="tile-body">
-                                                        <i class="fa fa-pie-chart"></i>
-                                                    </div>
-                                                    <div class="tile-object">
-                                                        <div class="name"> Largest Consumption </div>
-                                                        <div class="number" id="largestConsumption"> Television </div>
-                                                    </div>
-                                                </div>      
-                                           
-                                                   
-                                                   <!-- END Tile Largest Consumption -->
-                                                   
-                                                   <!-- BEGIN Tile Monthly Running Total -->
-                                            
-                                           
-                                                <div class="tile double bg-red-sunglo">
-                                                    <div class="tile-body">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </div>
-                                                    <div class="tile-object">
-                                                        <div class="name"> Monthly Running Total </div>
-                                                        <div class="number" id="monthlyRunningTotal"> $32.42 </div>
-                                                    </div>
-                                                </div>      
-                                            </div>
-                                                   
-                                                   <!-- END Tile Monthly Running Total  -->
-                                            
-                                            
-                                            
-                                            
-                                            <div class="margin-bottom-10 visible-sm"> </div>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>  
                             </div>
+                            
+                            
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <!-- BEGIN Tile for Daily Cost-->
+                                <div  class="tile">
+                                    <div class="body">
+                                        <i class="fa fa-clock-o iconclass"></i>
+                                    </div>
+                                    <div class="desc valueclass">$200</div>
+                                    <div class="name nameclass" style="padding-left: 215px;">Daily Running Total</div>
+                                        
+                                    
+                                </div>  
+                            </div>    
+                                   
+                                     <!-- BEGIN Tile for Largest Consumption-->
+                            
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div  class="tile double">
+                                    <div class="tile-body">
+                                        <i class="fa fa-pie-chart iconclass"></i>
+                                    </div>
+                                    <div class="tile-object">
+                                        <div class="desc valueclass">TELEVISION</div>
+                                        <div class="name nameclass" style="padding-left: 200px;">Largest Consumption</div>
+                                    </div>
+                                </div>  
+                            </div>
+                           
+                                   
+                                   <!-- END Tile Largest Consumption -->
+                                   
+                                   <!-- BEGIN Tile Monthly Running Total -->
+                            
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div  class="tile double">
+                                    <div class="tile-body">
+                                        <i class="fa fa-calendar iconclass"></i>
+                                    </div>
+                                    <div class="tile-object">
+                                        <div class="desc valueclass">$32.42</div>
+                                        <div class="name nameclass" style="padding-left: 200px;">Monthly Running Total</div>
+                                    </div>
+                                </div> 
+                            </div>
+                                   
+                                   <!-- END Tile Monthly Running Total  -->
+                            
+                            
+                            
+                            
+                            <div class="margin-bottom-10 visible-sm"> </div>
+                            
                         </div>
 
                     </div>
@@ -1372,4 +1374,41 @@ License: You must have a valid license purchased only from themeforest(the above
 #monthlyConsumption{
     padding-top: 20px;
 }
+
+#humiditybutton, #temperaturebutton, #energybutton{
+    padding-left: 20px;
+}
+
+.tile {
+    height: 140px;
+    width: 435px;
+    background-color: #35415F;
+}
+#bottomrow{
+    padding-bottom: 80px;
+}
+.iconclass{
+    color:white;
+    font-size:50px;
+    float:right;
+    padding:100px 20px 0 0;
+}
+.valueclass{
+    color:white;
+    font-size:60px;
+    text-align:center;
+    padding-top: 25px;
+    width: 800px;
+}
+
+.nameclass{
+    color:white;
+    font-size:15px;
+}
+.graphbutton{
+    padding:5px 10px 0 0;
+    text-align:center;
+}
+
+
 </style>

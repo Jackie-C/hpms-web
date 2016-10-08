@@ -100,25 +100,26 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
+                                    
                                     <li class="nav-item start ">
-                                        <a href="currentenergy.html" class="nav-link ">
-                                            <i class="icon-bulb"></i>
-                                            <span class="title">Current Usage</span>
-                                             <span class="badge badge-success">314Kwh</span>
+                                        <a href="previousenergy.html" class="nav-link ">
+                                            <i class="icon-hourglass"></i>
+                                            <span class="title">Previous Usage</span>
+                                            <span class="badge badge-success">240Kwh</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item start ">
+                                        <a href="temperature.html" class="nav-link ">
+                                            <i class="icon-cloud-upload"></i>
+                                            <span class="title">Temperature</span>
+                                            <span class="badge badge-danger">3°C</span>
                                         </a>
                                     </li>
                                     <li class="nav-item start ">
                                         <a href="humidity.html" class="nav-link ">
-                                            <i class="icon-bar-chart"></i>
+                                            <i class="icon-pointer"></i>
                                             <span class="title">Humidity</span>
-                                            <span class="badge badge-success">10%</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item start ">
-                                        <a href="Temperature.html" class="nav-link ">
-                                            <i class="icon-graph"></i>
-                                            <span class="title">Temperature</span>
-                                            <span class="badge badge-danger">24°C</span>
+                                            <span class="badge badge-success">151%</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -152,7 +153,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="page-bar">
                             <ul class="page-breadcrumb">
                                 <li>
-                                    <a href="index.html">Home</a>
+                                    <a href="home.html">Home</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
@@ -183,7 +184,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="row">
                             
                             <div id = "energyportlet" class = "col-md-12">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="portlet light portlet-fit bordered">
                                         <div class="portlet-title">
                                             <div class="caption">
@@ -198,34 +199,35 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </div>
  
                                 
-                                <div class="column" id ="DataColumn">   
-                                    <div class="tiles col-md-1">
-                                            <div class="tile double bg-blue">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Peak Usage Hour</div>
-                                                    <div class="number">3:00pm </div>
-                                                </div>
-                                            </div>  
-                                        
-                                            <div class="tile double bg-blue">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-dollar"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Daily Running Total</div>
-                                                    <div class="number">$2610</div>
-                                                </div>
+                                <div class="row" > 
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="padding-left: 30px;">       
+                                        <div  class="tile bg-blue" >
+                                            <div class="body">
+                                                <i class="fa fa-clock-o iconclass"></i>
                                             </div>
+                                            <div class="desc valueclass">3:00pm</div>
+                                            <div class="name nameclass" style="padding-left: 110px;">Peak Usage Hour</div>   
+                                        </div>  
+                                    </div>
+                                    
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >       
+                                        <div  class="tile bg-blue" >
+                                            <div class="body">
+                                                <i class="fa fa-dollar iconclass"></i>
+                                            </div>
+                                            <div class="desc valueclass">$2610</div>
+                                            <div class="name nameclass" style="padding-left: 110px;">Daily Running Total</div>   
+                                        </div>  
+                                    </div>
+                                    
+                                    
+                                            
                                         
                                         <div>
                                     
                                             <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
                                                 <i class="fa fa-edit"></i></a>
-                                        </div>
-                                    </div>                                 
+                                        </div>                                
                                     
                         <!-- END DYNAMIC CHART PORTLET-->
                                 </div>
@@ -370,6 +372,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
         <script src="assets/pages/scripts/charts-flotcharts.min.js" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
+        <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
@@ -387,8 +390,32 @@ License: You must have a valid license purchased only from themeforest(the above
         
         
     }
+    
+    .tile {
+    height: 140px;
+    width: 300px;
+}
 
 #energyportlet{
     background-color: white;
     padding-top: 35px;
+}
+
+.iconclass{
+    color:white;
+    font-size:50px;
+    float:right;
+    padding:100px 20px 0 0;
+}
+.valueclass{
+    color:white;
+    font-size:60px;
+    text-align:center;
+    padding-top: 25px;
+    width: 800px;
+}
+
+.nameclass{
+    color:white;
+    font-size:15px;
 }
