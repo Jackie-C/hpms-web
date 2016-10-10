@@ -29,19 +29,19 @@ var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10
 	}
 
     // Tier 1 (Stats above chart)
-    $("#currentEnergyUsage").attr('data-value', Math.round(jsonObject.responses[0].aggregations["1"].value));
-    $("#totalDailyEnergyUsage").attr('data-value', Math.round(jsonObject.responses[0].aggregations["2"].value));
-    $("#temperature").attr('data-value', Math.round(jsonObject.responses[0].aggregations["3"].value));
-    $("#humidity").attr('data-value', Math.round(jsonObject.responses[0].aggregations["4"].value));
+    $("#currentEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["1"].value));
+    $("#totalDailyEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["2"].value));
+    $("#temperature").attr('data-value', Math.round(jsonObject.aggregations["3"].value));
+    $("#humidity").attr('data-value', Math.round(jsonObject.aggregations["4"].value));
 
     // Tier 2 (FlotChart)
     // TODO
 
     // Tier 3 (General Stats)
-    $("#numberTransactions").attr('data-percent', Math.round(jsonObject.responses[0].aggregations["5"].value));
-    $("#numberTransactions").text(Math.round(jsonObject.responses[0].aggregations["5"].value) + "%");
+    $("#numberTransactions").attr('data-percent', Math.round(jsonObject.aggregations["5"].value));
+    $("#numberTransactions").text(Math.round(jsonObject.aggregations["5"].value) + "%");
 
-    $("#dailyRunningTotal").text("$" + (Math.round(jsonObject.responses[0].aggregations["6"].value)).toFixed(2));
-    $("#largestConsumption").text("Enter jsonString");
-    $("#monthlyRunningTotal").text("$" + (Math.round(jsonObject.responses[0].aggregations["9"].value)).toFixed(2));
+    $("#dailyRunningTotal").text("$" + (Math.round(jsonObject.aggregations["6"].value)).toFixed(2));
+    $("#largestConsumption").text("Television");
+    $("#monthlyRunningTotal").text("$" + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
 })(jQuery);
