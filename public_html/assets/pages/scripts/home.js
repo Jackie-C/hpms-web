@@ -12,7 +12,7 @@ var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10
 		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
-			"kbn-version": "5.0.0-beta1"
+			"kbn-version": "5.0.0-beta1",
 			"accept": "application/json, text/plain, */*"
 		},
 		data: JSON.stringify(
