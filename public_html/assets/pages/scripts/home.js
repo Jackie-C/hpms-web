@@ -1,7 +1,6 @@
 /*
-var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10,"successful":10,"failed":0},"hits":{"total":4001,"max_score":0,"hits":[]},"aggregations":{"1":{"value":101.03560990466235},"2":{"value":239.9712136},"3":{"value":75.03073842},"4":{"value":1.5055978916528368},"5":{"value":2.99869039},"6":{"value":25.002442595},"7":{"value":150.84587334636507},"8":{"value":708.9589119138891},"9":{"value":55.00440527815114},"10":{"value":603.5343392588068}},"status":200}]};
+var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful":35,"failed":0},"hits":{"total":17046,"max_score":0.0,"hits":[]},"aggregations":{"1":{"value":7209.464507283031},"2":{"value":7209.464507283031},"3":{"value":22.256084112057735},"4":{"value":49.953888806052724},"5":{"value":7209.464507283031},"6":{"value":7209.464507283031},"7":{"value":0.10573542923974878},"8":{"value":2},"9":{"value":1802.3661268207577}}};
 */
-   
 (function($) {
 	var jsonObject = null;
 	
@@ -38,10 +37,8 @@ var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10
     // TODO
 
     // Tier 3 (General Stats)
-    $("#numberTransactions").attr('data-percent', Math.round(jsonObject.aggregations["5"].value));
-    $("#numberTransactions").text(Math.round(jsonObject.aggregations["5"].value) + "%");
-
-    $("#dailyRunningTotal").text("$" + (Math.round(jsonObject.aggregations["6"].value)).toFixed(2));
+    $("#numberTransactions").text((Math.round(jsonObject.aggregations["5"].value) / Math.round(jsonObject.aggregations["6"].value) * 100) + " %");
+    $("#dailyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["7"].value)).toFixed(2));
     $("#largestConsumption").text("Television");
-    $("#monthlyRunningTotal").text("$" + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
+    $("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
 })(jQuery);
