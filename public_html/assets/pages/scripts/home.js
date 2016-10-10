@@ -20,26 +20,28 @@ var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful"
 		success: function(data) {
 			jsonObject = data;
 			checkResponse();
-			// Tier 1 (Stats above chart)
-			$("#currentEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["1"].value));
-			$("#totalDailyEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["2"].value));
-			$("#temperature").attr('data-value', Math.round(jsonObject.aggregations["3"].value));
-			$("#humidity").attr('data-value', Math.round(jsonObject.aggregations["4"].value));
-
-			// Tier 2 (FlotChart)
-			// TODO
-
-			// Tier 3 (General Stats)
-			$("#numberTransactions").text((Math.round(jsonObject.aggregations["5"].value) / Math.round(jsonObject.aggregations["6"].value) * 100) + " %");
-			$("#dailyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["7"].value)).toFixed(2));
-			$("#largestConsumption").text("Television");
-			$("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
+			updateValues();
 		}
 	});
 		
 	function checkResponse() {
 		console.log(jsonObject);
 	}
+	
+	function updateValues() {
+		// Tier 1 (Stats above chart)
+		$("#currentEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["1"].value));
+		$("#totalDailyEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["2"].value));
+		$("#temperature").attr('data-value', Math.round(jsonObject.aggregations["3"].value));
+		$("#humidity").attr('data-value', Math.round(jsonObject.aggregations["4"].value));
 
-    
+		// Tier 2 (FlotChart)
+		// TODO
+
+		// Tier 3 (General Stats)
+		$("#numberTransactions").text((Math.round(jsonObject.aggregations["5"].value) / Math.round(jsonObject.aggregations["6"].value) * 100) + " %");
+		$("#dailyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["7"].value)).toFixed(2));
+		$("#largestConsumption").text("Television");
+		$("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
+	}
 })(jQuery);
