@@ -6,11 +6,14 @@ var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10
 	var jsonObject = null;
 	
 	$.ajax({
-		url: "/elasticsearch/hms-homeuser1-*/_search",
+		url: "/kibana/elasticsearch/hms-homeuser1-*/_search",
 		type: "POST",
+		contentType: "application/json; charset=UTF-8",
+		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
 			"kbn-version": "5.0.0-beta1"
+			"accept": "application/json, text/plain, */*"
 		},
 		data: JSON.stringify(
 		{"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"range":{"timestamp":{"gte":1451566800000,"lte":1483189199999,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{"1":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"2":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"3":{"avg":{"field":"temperature"}},"4":{"avg":{"field":"humidity"}},"5":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"6":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"7":{"avg":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}},"8":{"cardinality":{"field":"sensorName.keyword"}},"9":{"sum":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}}}}
@@ -18,9 +21,7 @@ var jsonObject = {"responses":[{"took":5,"timed_out":false,"_shards":{"total":10
 		success: function(data) {
 			jsonObject = data;
 			checkResponse();
-		},
-		contentType: "application/json; charset=UTF-8",
-		dataType: 'json'
+		}
 	});
 		
 	function checkResponse() {
