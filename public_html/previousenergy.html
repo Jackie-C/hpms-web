@@ -183,7 +183,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="row">
                             
                             <div id = "energyportlet" class = "col-md-12">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="portlet light portlet-fit bordered">
                                         <div class="portlet-title">
                                             <div class="caption">
@@ -198,38 +198,63 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </div>
  
                                 
-                                <div class="column" id ="DataColumn">   
-                                    <div class="tiles col-md-1">
-                                            <div class="tile double bg-red">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Peak Usage Hour</div>
-                                                    <div class="number">3:00pm </div>
-                                                </div>
-                                            </div>  
-                                        
-                                            <div class="tile double bg-red">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-dollar"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Previous Day Total Cost</div>
-                                                    <div class="number">$2610</div>
-                                                </div>
-                                            </div>
-                                        
-                                        <div>
-                                    
-                                            <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
-                                                <i class="fa fa-edit"></i></a>
-                                        </div>
-                                    </div>                                 
-                                    
-                        <!-- END DYNAMIC CHART PORTLET-->
-                                </div>
+                                
                             </div>
+                            
+                            <div id = "bottomrow" class="row" style="padding:0 0 20px 15px;">
+                             
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">       
+                                        <div  class="tile">
+                                            <div class="body">
+                                                <i class="fa fa-clock-o iconclass"></i>
+                                            </div>
+                                            <div class="desc valueclass">3:00pm</div>
+                                            <div class="name nameclass" style="padding-left: 215px;">Peak Usage Hour</div>
+                                            
+
+                                        </div>  
+                                    </div>
+                                    
+                                    
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <!-- BEGIN Tile for Daily Cost-->
+                                        <div  class="tile">
+                                            <div class="body">
+                                                <i class="fa fa-dollar iconclass"></i>
+                                            </div>
+                                            <div class="desc valueclass">$2610</div>
+                                            <div class="name nameclass" style="padding-left: 215px;">Previous Day Total Cost</div>
+                                                
+                                            
+                                        </div>  
+                                    </div>    
+                                           
+                                             <!-- BEGIN Tile for Largest Consumption-->
+                                    
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div  class = "column">
+                                            <div>                                    
+                                                <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                            <div style="padding-top: 20px;">                                    
+                                                <a href="javascript:;" class="btn btn-lg red" > EXPORT TO PDF
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                   
+                                           
+                                           <!-- END Tile Largest Consumption -->
+                                           
+                                           <!-- END Tile Monthly Running Total  -->
+                                    
+                                    
+                                    
+                                    
+                                    <div class="margin-bottom-10 visible-sm"> </div>
+                                    
+                                </div>
                         </div>
                         
                         
@@ -392,4 +417,28 @@ License: You must have a valid license purchased only from themeforest(the above
 #energyportlet{
     background-color: white;
     padding-top: 35px;
+}
+.tile {
+    height: 140px;
+    width: 435px;
+    background-color: #ED3B46;
+}
+    
+.iconclass{
+    color:white;
+    font-size:50px;
+    float:right;
+    padding:100px 20px 0 0;
+}
+.valueclass{
+    color:white;
+    font-size:60px;
+    text-align:center;
+    padding-top: 25px;
+    width: 800px;
+}
+
+.nameclass{
+    color:white;
+    font-size:15px;
 }

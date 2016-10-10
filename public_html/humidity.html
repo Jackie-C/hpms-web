@@ -50,6 +50,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
+        <link rel="stylesheet" href="css/circle.css">
+
     <!-- END HEAD -->
 
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-sidebar-closed">
@@ -183,7 +185,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="row">
                             
                             <div id = "energyportlet" class = "col-md-12">
-                                <div id = "chartportlet" class="col-md-8">
+                                <div id = "chartportlet" class="col-md-12">
                                     <div id = "humidPortlet" class="portlet light portlet-fit bordered">
                                         <div class="portlet-title">
                                             <div class="caption">
@@ -196,46 +198,61 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                 </div>
- 
-                                
-                                <div class="column" id ="DataColumn">   
-                                    <div class="tiles">
-                                            <div class="tile double bg-purple">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Maximum Humidity</div>
-                                                    <div class="number">26% 12pm </div>
-                                                </div>
-                                            </div>  
-                                        
-                                            <div class="tile double bg-purple">
-                                                <div class="tile-body">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </div>
-                                                <div class="tile-object">
-                                                    <div class="name">Minimum Humidity</div>
-                                                    <div class="number">13% 7pm</div>
-                                                </div>
+                                <div id = "bottomrow" class="row" style="padding:0 0 20px 15px;">
+                             
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">       
+                                        <div  class="tile">
+                                            <div class="body">
+                                                <i class="fa fa-clock-o iconclass"></i>
                                             </div>
+                                            <div class="desc valueclass">26% 3pm</div>
+                                            <div class="name nameclass" style="padding-left: 215px;">Maximum Humdidity</div>
                                             
-                                            <div class="tile" style="background:url(‘Pic.jpg'); background-size:200px 200px" >
-                                                <div class="caption" onclick="alert('Hi!');" >
-                                                <p>Some caption</p>
-                                            <p id="description">Some lengthy description that may potentially overflow into two lines</p>
-                                                    </div>
-</div>
-                                        
-                                        <div>
+
+                                        </div>  
+                                    </div>
                                     
-                                            <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
-                                                <i class="fa fa-edit"></i></a>
-                                        </div>
-                                    </div>                                 
                                     
-                        <!-- END DYNAMIC CHART PORTLET-->
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <!-- BEGIN Tile for Daily Cost-->
+                                        <div  class="tile">
+                                            <div class="body">
+                                                <i class="fa fa-clock-o iconclass"></i>
+                                            </div>
+                                            <div class="desc valueclass">13% 7pm</div>
+                                            <div class="name nameclass" style="padding-left: 215px;">Minimum Humidity</div>
+                                                
+                                            
+                                        </div>  
+                                    </div>    
+                                           
+                                             <!-- BEGIN Tile for Largest Consumption-->
+                                    
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div  class = "column">
+                                            <div>                                    
+                                                <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                            <div style="padding-top: 20px;">                                    
+                                                <a href="javascript:;" class="btn btn-lg red" > EXPORT TO PDF
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                   
+                                           
+                                           <!-- END Tile Largest Consumption -->
+                                           
+                                           <!-- END Tile Monthly Running Total  -->
+                                    
+                                    
+                                    
+                                    
+                                    <div class="margin-bottom-10 visible-sm"> </div>
+                                    
                                 </div>
+ 
                              </div>
                         </div>
                         
@@ -288,6 +305,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <!-- END QUICK SIDEBAR -->
             </div>
             <!-- END CONTAINER -->
+            
             <!-- BEGIN FOOTER -->
             <div class="page-footer">
                 <div class="page-footer-inner"> 2016 &copy;
@@ -382,6 +400,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="assets/layouts/global/scripts/quick-nav.min.js" type="text/javascript"></script>
+        
         <!-- END THEME LAYOUT SCRIPTS -->
     </body>
 
@@ -399,3 +418,38 @@ License: You must have a valid license purchased only from themeforest(the above
         background-color: white;
         padding-top: 35px;
     }
+    
+    .tile {
+    height: 140px;
+    width: 435px;
+    background-color: #733DA8;
+}
+    
+.iconclass{
+    color:white;
+    font-size:50px;
+    float:right;
+    padding:100px 20px 0 0;
+}
+.valueclass{
+    color:white;
+    font-size:60px;
+    text-align:center;
+    padding-top: 25px;
+    width: 800px;
+}
+
+.nameclass{
+    color:white;
+    font-size:15px;
+}
+    
+
+</style>
+
+
+
+
+
+
+

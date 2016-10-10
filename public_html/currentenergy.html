@@ -197,40 +197,66 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                 </div>
- 
                                 
-                                <div class="row" > 
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="padding-left: 30px;">       
-                                        <div  class="tile bg-blue" >
+                                <div id = "bottomrow" class="row" style="padding:0 0 20px 15px;">
+                             
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">       
+                                        <div  class="tile">
                                             <div class="body">
                                                 <i class="fa fa-clock-o iconclass"></i>
                                             </div>
                                             <div class="desc valueclass">3:00pm</div>
-                                            <div class="name nameclass" style="padding-left: 110px;">Peak Usage Hour</div>   
+                                            <div class="name nameclass" style="padding-left: 215px;">Peak Usage Hour</div>
+                                            
+
                                         </div>  
                                     </div>
                                     
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >       
-                                        <div  class="tile bg-blue" >
+                                    
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <!-- BEGIN Tile for Daily Cost-->
+                                        <div  class="tile">
                                             <div class="body">
                                                 <i class="fa fa-dollar iconclass"></i>
                                             </div>
                                             <div class="desc valueclass">$2610</div>
-                                            <div class="name nameclass" style="padding-left: 110px;">Daily Running Total</div>   
-                                        </div>  
-                                    </div>
-                                    
-                                    
+                                            <div class="name nameclass" style="padding-left: 215px;">Daily Running Total</div>
+                                                
                                             
-                                        
-                                        <div>
+                                        </div>  
+                                    </div>    
+                                           
+                                             <!-- BEGIN Tile for Largest Consumption-->
                                     
-                                            <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
-                                                <i class="fa fa-edit"></i></a>
-                                        </div>                                
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div  class = "column">
+                                            <div>                                    
+                                                <a href="javascript:;" class="btn btn-lg red"> EXPORT TO CSV
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                            <div style="padding-top: 20px;">                                    
+                                                <a href="javascript:;" class="btn btn-lg red" > EXPORT TO PDF
+                                                    <i class="fa fa-edit"></i></a>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                   
+                                           
+                                           <!-- END Tile Largest Consumption -->
+                                           
+                                           <!-- END Tile Monthly Running Total  -->
                                     
-                        <!-- END DYNAMIC CHART PORTLET-->
+                                    
+                                    
+                                    
+                                    <div class="margin-bottom-10 visible-sm"> </div>
+                                    
                                 </div>
+                                
+                                
+ 
+                                
+                                
                             </div>
                         </div>
                         
@@ -400,7 +426,12 @@ License: You must have a valid license purchased only from themeforest(the above
     background-color: white;
     padding-top: 35px;
 }
-
+.tile {
+    height: 140px;
+    width: 435px;
+    background-color: #2289D5;
+}
+    
 .iconclass{
     color:white;
     font-size:50px;

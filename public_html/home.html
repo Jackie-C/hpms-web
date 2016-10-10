@@ -542,53 +542,51 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- BEGIN DASHBOARD STATS 1-->
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <a class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                                <a class="dashboard-stat dashboard-stat-v2 blue" href="currentenergy.html">
                                     <div class="visual">
                                         <i class="fa fa-bolt"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span id="currentEnergyUsage" data-counter="counterup" data-value=""></span> kWh 
+                                            <span id="currentEnergyUsage" data-counter="counterup" data-value=""></span>kWh 
                                         </div>
                                         <div class="desc"> Current Energy Usage </div>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <a class="dashboard-stat dashboard-stat-v2 red" href="#">
+                                <a class="dashboard-stat dashboard-stat-v2 red" href="previousenergy.html">
                                     <div class="visual">
                                         <i class="icon-hourglass"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span id="totalDailyEnergyUsage" data-counter="counterup" data-value=""></span> kWh 
-										</div>
+                                            <span id="totalDailyEnergyUsage" data-counter="counterup" data-value=""></span>kWh </div>
                                         <div class="desc"> Previous Day Energy Usage </div>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <a class="dashboard-stat dashboard-stat-v2 green" href="#">
+                                <a class="dashboard-stat dashboard-stat-v2 green" href="temperature.html">
                                     <div class="visual">
                                         <i class="icon-cloud-upload"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span id="temperature" data-counter="counterup" data-value=""></span> &#8451;
+                                            <span id="temperature" data-counter="counterup" data-value=""></span>&#8451;
                                         </div>
                                         <div class="desc"> Temperature </div>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
+                                <a class="dashboard-stat dashboard-stat-v2 purple" href="humidity.html">
                                     <div class="visual">
                                         <i class="icon-pointer"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span id="humidity" data-counter="counterup" data-value=""></span> %
-										</div>
+                                            <span id="humidity" data-counter="counterup" data-value=""></span>% </div>
                                         <div class="desc"> Humidity </div>
                                     </div>
                                 </a>
@@ -640,10 +638,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="body">
                                         <i class="fa fa-line-chart iconclass"></i>
                                     </div>
-									<div class="desc valueclass">
-										<span id="numberTransactions" data-counter="counterup" data-percent=""></span>
-									</div>
-                                    <div class="name nameclass" style="padding-left: 110px;">Change in Monthly Consumption</div>
+                                    <div class="desc valueclass">% Chart</div>
+                                    <div class="name nameclass" style="text-align: right; padding-right: 90px;">Change in Monthly Consumption</div>
                                     
 
                                 </div>  
@@ -656,9 +652,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="body">
                                         <i class="fa fa-clock-o iconclass"></i>
                                     </div>
-                                    <div class="desc valueclass">
-										<span id="dailyRunningTotal" data-counter="counterup" data-value=""></span>
-									</div>
+                                    <div class="desc valueclass">$200</div>
                                     <div class="name nameclass" style="padding-left: 215px;">Daily Running Total</div>
                                         
                                     
@@ -673,10 +667,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <i class="fa fa-pie-chart iconclass"></i>
                                     </div>
                                     <div class="tile-object">
-                                        <div class="desc valueclass">
-											<span id="largestConsumption" data-counter="counterup" data-value=""></span>
-										</div>
-                                        <div class="name nameclass" style="padding-left: 200px;">Largest Consumption</div>
+                                        <div class="desc valueclass">Television</div>
+                                        <div class="name nameclass" style="padding-left: 180px;">Largest Consumption</div>
                                     </div>
                                 </div>  
                             </div>
@@ -692,10 +684,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <i class="fa fa-calendar iconclass"></i>
                                     </div>
                                     <div class="tile-object">
-                                        <div class="desc valueclass">
-											<span id="monthlyRunningTotal" data-counter="counterup" data-value=""></span>
-										</div>
-                                        <div class="name nameclass" style="padding-left: 200px;">Monthly Running Total</div>
+                                        <div class="desc valueclass">$32.42</div>
+                                        <div class="name nameclass" style="padding-left: 160px;">Monthly Running Total</div>
                                     </div>
                                 </div> 
                             </div>
@@ -1391,8 +1381,9 @@ License: You must have a valid license purchased only from themeforest(the above
 
 .tile {
     height: 140px;
-    width: 435px;
-    background-color: #35415F;
+    background-color: #35415F;   
+    max-width: 100%;
+    max-height: 100%;
 }
 #bottomrow{
     padding-bottom: 80px;
@@ -1418,6 +1409,21 @@ License: You must have a valid license purchased only from themeforest(the above
 .graphbutton{
     padding:5px 10px 0 0;
     text-align:center;
+}
+
+@media only screen and (max-width:991px){
+    .tile{
+        height: 130px;        
+    }
+    #bottomrow{
+        display: table;
+    }
+    
+ 
+}
+
+@media only screen and (max-width:767px){
+    
 }
 
 
