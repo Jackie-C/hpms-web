@@ -30,10 +30,10 @@ var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful"
 	
 	function updateValues() {
 		// Tier 1 (Stats above chart)
-		$("#currentEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["1"].value));
-		$("#totalDailyEnergyUsage").attr('data-value', Math.round(jsonObject.aggregations["2"].value));
-		$("#temperature").attr('data-value', Math.round(jsonObject.aggregations["3"].value));
-		$("#humidity").attr('data-value', Math.round(jsonObject.aggregations["4"].value));
+		$("#currentEnergyUsage").text(Math.round(jsonObject.aggregations["1"].value));
+		$("#totalDailyEnergyUsage").text(Math.round(jsonObject.aggregations["2"].value));
+		$("#temperature").text(Math.round(jsonObject.aggregations["3"].value));
+		$("#humidity").text(Math.round(jsonObject.aggregations["4"].value));
 
 		// Tier 2 (FlotChart)
 		// TODO
