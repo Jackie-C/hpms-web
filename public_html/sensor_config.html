@@ -558,9 +558,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <i class="success"></i>Configured sensors </div>
                                         <div class="tools">
                                             <a href="javascript:;" class="collapse"> </a>
-                                            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+                                            <a href="#portlet-config" data-toggle="modal" class="config-hide"> </a>
                                             <a href="javascript:;" class="reload"> </a>
-                                            <a href="javascript:;" class="remove"> </a>
+                                            <a href="javascript:;" class="remove-hide"> </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
@@ -630,15 +630,12 @@ License: You must have a valid license purchased only from themeforest(the above
 					
                    <div class="portlet box green">
                                             <div class="portlet-title">
-                                                <div class="caption">
-                                                    Add New Sensor </div>
-                                                <div class="tools">
-                                                    <a href="javascript:;" class="collapse"><i class="fa fa-plus-square"></i> </a>
-                                                </div>
+												<div class="caption">
+                                                    Add New Sensor <i class="fa fa-plus-square"></i></div> 
                                             </div>
                                             <div class="portlet-body form">
                                                 <!-- BEGIN FORM-->
-                                                <form action="#" class="form-horizontal">
+                                                <form action="#" class="form-horizontal" name = "AddSensorForm">
                                                     <div class="form-body">
                                                         
                                                       <div class="form-group">
@@ -692,8 +689,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     <div class="form-actions">
                                                         <div class="row">
                                                             <div class="col-md-offset-3 col-md-9">
-                                                                <button type="submit" class="btn btn-circle green">Submit</button>
-                                                                <button type="button" class="btn btn-circle grey-salsa btn-outline">Cancel</button>
+                                                                <button type="submit" class="btn btn-circle green" onclick ="clearForm()">Submit</button>
+                                                                <button type="button" class="btn btn-circle grey-salsa btn-outline" onclick ="clearForm()">Cancel</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1059,6 +1056,14 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--Import JQuery -->
     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <!-- Custom Script -->
+	<script>
+	function clearForm() {
+   var frm = document.getElementsByName('AddSensorForm')[0];
+   frm.submit(); // Submit
+   frm.reset();  // Reset
+   return false; // Prevent page refresh
+}
+	</script>
     <script>
     var apiURL = "http://hmps.localtunnel.me/api";
     var sensorDivClass = "";
