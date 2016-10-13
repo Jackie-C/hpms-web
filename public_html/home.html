@@ -633,33 +633,33 @@ License: You must have a valid license purchased only from themeforest(the above
                         </div>
                         <!-- END DYNAMIC CHART PORTLET-->
                                                 
-                        <div id = "bottomrow" class="row">
+                        <div class="row">
                              
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">       
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile">       
                                 <div  class="tile">
                                     <div class="body">
                                         <i class="fa fa-line-chart iconclass"></i>
                                     </div>
                                     <div class="desc valueclass">
-										<span id="numberTransactions" data-counter="counterup" data-percent=""></span>
+										<span id="numberTransactions" data-counter="counterup" data-percent="">0</span>
 									</div>
-                                    <div class="name nameclass" style="text-align: right; padding-right: 90px;">Change in Monthly Consumption</div>
+                                    <div class="name nameclass" style="text-align: center; position:top;">Change in Monthly Consumption</div>
                                     
 
                                 </div>  
                             </div>
                             
                             
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile">
                                     <!-- BEGIN Tile for Daily Cost-->
                                 <div  class="tile">
                                     <div class="body">
                                         <i class="fa fa-clock-o iconclass"></i>
                                     </div>
                                     <div class="desc valueclass">
-										<span id="dailyRunningTotal" data-counter="counterup" data-value=""></span>
+										<span id="dailyRunningTotal" data-counter="counterup" data-value="">0</span>
 									</div>
-                                    <div class="name nameclass" style="padding-left: 215px;">Daily Running Total</div>
+                                    <div class="name nameclass" style="text-align:center;">Daily Running Total</div>
                                         
                                     
                                 </div>  
@@ -667,16 +667,16 @@ License: You must have a valid license purchased only from themeforest(the above
                                    
                                      <!-- BEGIN Tile for Largest Consumption-->
                             
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile">
                                 <div  class="tile double">
                                     <div class="tile-body">
                                         <i class="fa fa-pie-chart iconclass"></i>
                                     </div>
                                     <div class="tile-object">
                                         <div class="desc valueclass">
-											<span id="largestConsumption" data-counter="counterup" data-value=""></span>
+											<span id="largestConsumption" data-counter="counterup" data-value="">0</span>
 										</div>
-                                        <div class="name nameclass" style="padding-left: 180px;">Largest Consumption</div>
+                                        <div class="name nameclass" style="text-align:center;">Largest Consumption</div>
                                     </div>
                                 </div>  
                             </div>
@@ -686,16 +686,16 @@ License: You must have a valid license purchased only from themeforest(the above
                                    
                                    <!-- BEGIN Tile Monthly Running Total -->
                             
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile">
                                 <div  class="tile double">
                                     <div class="tile-body">
                                         <i class="fa fa-calendar iconclass"></i>
                                     </div>
                                     <div class="tile-object">
                                         <div class="desc valueclass">
-											<span id="monthlyRunningTotal" data-counter="counterup" data-value=""></span>
+											<span id="monthlyRunningTotal" data-counter="counterup" data-value="">0</span>
 										</div>
-                                        <div class="name nameclass" style="padding-left: 160px;">Monthly Running Total</div>
+                                        <div class="name nameclass" style="text-align:center;">Monthly Running Total</div>
                                     </div>
                                 </div> 
                             </div>
@@ -1392,26 +1392,25 @@ License: You must have a valid license purchased only from themeforest(the above
 }
 
 .tile {
-    height: 140px;
+    height: 120px;
     background-color: #35415F;   
     max-width: 100%;
     max-height: 100%;
 }
-#bottomrow{
-    padding-bottom: 80px;
+.bottomrowtile{
+    padding-bottom:25px;
 }
 .iconclass{
     color:white;
     font-size:50px;
     float:right;
-    padding:100px 20px 0 0;
+    padding:85px 15px 0 0;
 }
 .valueclass{
     color:white;
     font-size:60px;
     text-align:center;
-    padding-top: 25px;
-    width: 800px;
+    padding-top: 10px;
 }
 
 .nameclass{
@@ -1424,18 +1423,37 @@ License: You must have a valid license purchased only from themeforest(the above
 }
 
 @media only screen and (max-width:991px){
-    .tile{
-        height: 130px;        
-    }
-    #bottomrow{
-        display: table;
+    bottomrow{
+        display:table;
     }
     
  
 }
 
-@media only screen and (max-width:767px){
-    
+@media only screen and (max-width:1180px){
+    .iconclass{
+        padding-right:5px;
+    }
+}
+@media only screen and (max-width:1345px){
+    .valueclass{
+        padding-top:5px;
+    }
+}
+
+
+
+
+@media only screen and (max-width:1455px){
+    .nameclass{
+        font-size: 14px;
+    }
+    .iconclass{
+        font-size: 45px;
+    }
+    .valueclass{
+        font-size:55px;
+    }
 }
 
 
