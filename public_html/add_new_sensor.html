@@ -35,7 +35,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
         <!-- BEGIN PAGE LEVEL PLUGINS -->
-        <link href="assets/global/plugins/bootstrap-dfaterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css" />
@@ -1029,7 +1029,6 @@ License: You must have a valid license purchased only from themeforest(the above
         $.ajax(
         {
             url: apiURL + '/sensors/',
-			headers: {"Access-Control-Allow-Origin":"*"},
             type: 'POST',
             data: $('.form-addsensor').serialize(),
             success: function()
@@ -1044,8 +1043,7 @@ License: You must have a valid license purchased only from themeforest(the above
         $.ajax(
         {
             type: "GET",
-            url: apiURL + '/sensors/',
-			headers: {"Access-Control-Allow-Origin":"*"}
+            url: apiURL + '/sensors/'
         }).then(function(data)
         {
             console.log(JSON.stringify(data));
@@ -1062,7 +1060,6 @@ License: You must have a valid license purchased only from themeforest(the above
         {
             type: "PUT",
             url: apiURL + '/sensors/' + sensorID,
-			headers: {"Access-Control-Allow-Origin":"*"},
             data: $('.edit-' + sensorID).serialize(),
             success: function(result)
             {
@@ -1082,7 +1079,6 @@ License: You must have a valid license purchased only from themeforest(the above
         {
             type: "DELETE",
             url: apiURL + '/sensors/' + sensorID,
-			headers: {"Access-Control-Allow-Origin":"*"},
             success: function(result)
             {
                 if (!result)

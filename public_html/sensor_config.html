@@ -1111,7 +1111,6 @@ License: You must have a valid license purchased only from themeforest(the above
         $.ajax(
         {
             url: apiURL + '/sensors/',
-			headers: {"Access-Control-Allow-Origin":"*"},
             type: 'POST',
             data: $('.form-addsensor').serialize(),
             success: function()
@@ -1126,8 +1125,7 @@ License: You must have a valid license purchased only from themeforest(the above
         $.ajax(
         {
             type: "GET",
-            url: apiURL + '/sensors/',
-			headers: {"Access-Control-Allow-Origin":"*"}
+            url: apiURL + '/sensors/'
         }).then(function(data)
         {
             console.log(JSON.stringify(data));
@@ -1144,7 +1142,6 @@ License: You must have a valid license purchased only from themeforest(the above
         {
             type: "PUT",
             url: apiURL + '/sensors/' + sensorID,
-			headers: {"Access-Control-Allow-Origin":"*"},
             data: $('.edit-' + sensorID).serialize(),
             success: function(result)
             {
@@ -1164,7 +1161,6 @@ License: You must have a valid license purchased only from themeforest(the above
         {
             type: "DELETE",
             url: apiURL + '/sensors/' + sensorID,
-			headers: {"Access-Control-Allow-Origin":"*"},
             success: function(result)
             {
                 if (!result)
