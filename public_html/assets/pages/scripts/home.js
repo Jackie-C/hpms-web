@@ -1,10 +1,14 @@
-/*
-var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful":35,"failed":0},"hits":{"total":17046,"max_score":0.0,"hits":[]},"aggregations":{"1":{"value":7209.464507283031},"2":{"value":7209.464507283031},"3":{"value":22.256084112057735},"4":{"value":49.953888806052724},"5":{"value":7209.464507283031},"6":{"value":7209.464507283031},"7":{"value":0.10573542923974878},"8":{"value":2},"9":{"value":1802.3661268207577}}};
-*/
+ 
 (function($) {
 	var jsonObject = null;
-	
-	$.ajax({
+    
+    
+    
+    
+    function getJsonObject() {
+        
+        
+        $.ajax({
 		url: "/kibana/elasticsearch/hms-homeuser1-*/_search",
 		type: "POST",
 		contentType: "application/json; charset=UTF-8",
@@ -23,6 +27,10 @@ var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful"
 			updateValues();
 		}
 	});
+        
+        
+        
+    }
 	
 	function checkResponse() {
 		console.log(jsonObject);
@@ -44,4 +52,10 @@ var jsonObject = {"took":24,"timed_out":false,"_shards":{"total":35,"successful"
 		$("#largestConsumption").text("Television");
 		$("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
 	}
+    
+    
+    setInterval(getJsonObject(), 5000);
+    
 })(jQuery);
+
+
