@@ -503,7 +503,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </a>
                             </li>
                             <li class="nav-item  ">
-                                <a href="page_user_login_1.html" class="nav-link nav-toggle">
+                                <a class="nav-link nav-toggle">
                                     <i class="icon-logout"></i>
                                     <span class="title">SIGN OUT</span>
                                     <span class="arrow"></span>
@@ -598,32 +598,39 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="clearfix"></div>
                         <!-- END DASHBOARD STATS 1-->
                         <!-- BEGIN DYNAMIC CHART PORTLET-->
-                        <div class="row">
+                        <div class="row" style = "padding: 15px 0 15px 0;">
                             <div class="col-md-12">
                                 <div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-title col-md-12">
-                                        <div class="caption col-md-1">
-                                            <i class="icon-settings font-dark"></i>
-                                            <span class="caption-subject font-dark sbold uppercase">Usage Trend</span>
-                                        </div>
-                                        <div class="graphbutton col-md-1">
-                                            <a href="javascript:;" id = "energybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
-                                                <i class="fa fa-bolt"></i> Energy </a>
-                                        </div>
-                                        <div class="graphbutton col-md-1">
-                                            <a href="javascript:;" id = "temperaturebutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
-                                                <i class="icon-cloud-upload"></i> Temperature </a>
-                                        </div>
-                                        <div class="graphbutton col-md-1">
-                                            <a href="javascript:;" id = "humiditybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload humiditybutton">
-                                                <i class="icon-pointer"></i> Humidity </a>
-                                        </div> 
-                                        <div class="page-toolbar">
-                                            <div id="dashboard-report-range" class="pull-right tooltips btn btn-md" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
-                                                <i class="icon-calendar"></i>&nbsp;
-                                                <span class="thin uppercase hidden-xs"></span>&nbsp;
-                                                <i class="fa fa-angle-down"></i>
-                                            </div>
+                                    <div class="portlet-title">
+                                        <div class = "titleelements">
+                                            <span class="caption" >
+                                                <span class="caption-subject font-dark sbold uppercase">Usage Trend</span>
+                                            </span>
+                                            <span class="graphbuttons">
+                                                <a href="javascript:;" id = "energybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
+                                                    <i class="fa fa-bolt"></i> Energy </a>
+                                            
+                                                <a href="javascript:;" id = "temperaturebutton" class="btn btn-sm btn-circle red easy-pie-chart-reload">
+                                                    <i class="icon-cloud-upload"></i> Temperature </a>
+                                                <a href="javascript:;" id = "humiditybutton" class="btn btn-sm btn-circle red easy-pie-chart-reload humiditybutton">
+                                                    <i class="icon-pointer"></i> Humidity </a>
+                                            </span> 
+                                            
+                                            <select class = "roomdropdown" name = "Average">
+                                                <option value="Average">Average</option>
+                                                <option value="Kitchen">Kitchen</option>
+                                                <option value="Lounge Room">Lounge Room</option>
+                                                <option value="Bedroom">Bedroom</option>
+                                                <option value="Laundry">Laundry</option>
+                                            </select>
+                                            
+                                            <span class="page-toolbar" style="float:right;">
+                                                <div id="dashboard-report-range" class="pull-right tooltips btn btn-md" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+                                                    <i class="icon-calendar"></i>&nbsp;
+                                                    <span class="thin uppercase hidden-xs"></span>&nbsp;
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
@@ -1393,6 +1400,11 @@ License: You must have a valid license purchased only from themeforest(the above
     #humiditybutton, #temperaturebutton, #energybutton{
         padding-left: 20px;
     }
+    
+    #roomdropdown{
+        padding-left: 10px;
+    }
+    
 
     .tile {
         height: 120px;
@@ -1425,9 +1437,12 @@ License: You must have a valid license purchased only from themeforest(the above
         bottom:5px;
         left: 15px;
     }
-    .graphbutton{
-        padding:5px 10px 0 0;
-        text-align:center;
+    .titleelements{
+        display:inline;
+    }
+    
+    .graphbuttons{
+        padding: 0 20px 0 20px;
     }
 
     @media only screen and (max-width:1830px){
@@ -1452,6 +1467,22 @@ License: You must have a valid license purchased only from themeforest(the above
         
         .valueclass{
             font-size:35px;
+        }
+    }
+    
+    @media only screen and (max-width:1140px){
+        .portlet-title{
+            display:block;
+        }
+    }
+    
+    @media only screen and (max-width:481px){
+        .graphbuttons{
+            display:block;
+            padding: 10px 0 10px 0;
+        }
+        .valueclass{
+            font-size:50px;
         }
     }
     
