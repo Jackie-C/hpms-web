@@ -40,7 +40,8 @@
 		$("#largestConsumption").text("Television");
 		$("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
 	}
-
+	
+	getJsonObject();
 	setInterval(function(){ getJsonObject() }, 60000);
 
 })(jQuery);
