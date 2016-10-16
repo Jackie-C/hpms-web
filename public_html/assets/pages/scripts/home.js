@@ -1,13 +1,8 @@
- 
 (function($) {
 	var jsonObject = null;
-    
-    
-    
-    
+
     function getJsonObject() {
-        
-        
+
         $.ajax({
 		url: "/kibana/elasticsearch/hms-homeuser1-*/_search",
 		type: "POST",
@@ -23,18 +18,11 @@
 		),
 		success: function(data) {
 			jsonObject = data;
-			checkResponse();
+			console.log(jsonObject);
 			updateValues();
 		}
-	});
-        
-        
-        
+		});
     }
-	
-	function checkResponse() {
-		console.log(jsonObject);
-	}
 	
 	function updateValues() {
 		// Tier 1 (Stats above chart)
@@ -52,10 +40,7 @@
 		$("#largestConsumption").text("Television");
 		$("#monthlyRunningTotal").text("$ " + (Math.round(jsonObject.aggregations["9"].value)).toFixed(2));
 	}
-    
-    
-    setInterval(getJsonObject(), 5000);
-    
+
+	setInterval(function(){ getJsonObject() }, 60000);
+
 })(jQuery);
-
-
