@@ -1,6 +1,6 @@
 (function($) {
-	var jsonObject1 = ;
-	var jsonObject2 = ;
+	var jsonObject1 = null;
+	var jsonObject2 = null;
 
     function kibanaQuery1() {
 
