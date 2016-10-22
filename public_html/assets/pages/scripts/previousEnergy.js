@@ -2,34 +2,9 @@
 
 (function($) {
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
-	var jsonObject1 = null;
 	var jsonObject2 = null;
 
-    function kibanaQuery1() {
-
-        $.ajax({
-		url: apiURL + "/hms-homeuser1-*/_search",
-		type: "POST",
-		contentType: "application/json; charset=UTF-8",
-		dataType: 'json',
-		headers: {
-			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
-			"kbn-version": "5.0.0-beta1",
-			"accept": "application/json, text/plain, */*"
-		},
-		data: JSON.stringify(
-		{"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"range":{"timestamp":{"gte":1451566800000,"lte":1483189199999,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{"1":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"2":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"3":{"avg":{"field":"temperature"}},"4":{"avg":{"field":"humidity"}},"5":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"6":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"7":{"avg":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}},"8":{"cardinality":{"field":"sensorName.keyword"}},"9":{"sum":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}}}}
-		),
-		success: function(data) {
-			jsonObject1 = data;
-			console.log(jsonObject1);
-			updateValues1();
-		}
-		});
-    }
-	
 	function kibanaQuery2() {
-
         $.ajax({
 		url: apiURL + "/hms-*/_search",
 		type: "POST",
@@ -47,58 +22,43 @@
 			jsonObject2 = data;
 			console.log(jsonObject2);
 			updateValues2();
+                        plotChart("Energy");
 		}
 		});
     }
 	
-	function updateValues1() {
-		// Tier 1 (Stats above chart)
-		$("#temperature").text(Math.round(jsonObject1.aggregations["3"].value));
-		$("#humidity").text(Math.round(jsonObject1.aggregations["4"].value));
-
-		// Tier 3 (General Stats)
-		$("#changeMonthlyConsumption").text((Math.round(jsonObject1.aggregations["5"].value) / Math.round(jsonObject1.aggregations["6"].value) * 100) + " %");
-		$("#largestConsumption").text("Television");
-	}
-	
 	function updateValues2() {
-		// Tier 1 (Stats above chart)
-		$("#currentEnergyUsage").text(Math.round(jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[1].daily_total.value));
-		$("#previousDayEnergyUsage").text(Math.round(jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[0].daily_total.value));
-
-		// Tier 3 (General Stats)
-		$("#dailyRunningTotal").text("$ " + (jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[1].daily_total_cost.value).toFixed(2));
-		$("#monthlyRunningTotal").text("$ " + (jsonObject2.aggregations["per_month"].buckets[0].monthly_total_cost.value).toFixed(2));
+		$("#dailyRunningTotal").text("$ " + (jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[0].daily_total_cost.value).toFixed(2));
 	}
         
-        function getChartData(category){
-            switch(category){
-                case "energy":
-                    var perDayBuckets = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets;
-                    var chartFormatted = new Array();
-                    
-                    $.each(perDayBuckets, function(index, value){
-                        $.each(value.per_hour.buckets, function(index, value){
-                            var perHourData = new Array();
-                            perHourData.push(value.key);
-                            perHourData.push(value.hourly_avg.value);
-                            chartFormatted.push(perHourData);
-                        });
-                    });
-                    return chartFormatted;
-                case "temperature":
-                    // TODO: awaiting api call for temperature
-                    // SEE ENERGY FOR IMPLEMENTATIONS
-                case "humidity":
-                    // TODO: awaiting api call for temperature
-                    // SEE ENERGY FOR IMPLEMENTATIONS
-            }
+        function getChartData(){
+            var currentDayBuckets = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[0];
+            var chartFormatted = new Array();
+            var highestUsageValue = 0;
+            var highestUsageTime;
+
+            console.log(currentDayBuckets);
+            $.each(currentDayBuckets.per_hour.buckets, function(index, value){
+                var perHourData = new Array();
+                perHourData.push(value.key);
+                perHourData.push(value.hourly_avg.value);
+                chartFormatted.push(perHourData);
+                
+                if (highestUsageValue < value.hourly_avg.value){
+                    highestUsageValue = value.hourly_avg.value;
+                    highestUsageTime = value.key;
+                }
+            });
+            
+            var peakUsageDateTime = new Date(highestUsageTime);
+            $("#peakUsageHour").text(peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+            return chartFormatted;
         }
         
         function plotChart(category){
-            var placeholder = $("#chart_poc");
+            var placeholder = $("#chart_4");
             
-            var data = getChartData(category.toLowerCase());
+            var data = getChartData();
             
             var dataset = [ { label: category + " Usage", data: data }];
             
@@ -110,7 +70,11 @@
         function getChartOption(category){
             return options = {
             series: {
-                lines: { show: true, fill: true},
+                lines: { 
+                    show: true, 
+                    fill: true,
+                    fillColor: '#ED3B46'
+                },
                 points: { show: true }
             },
             xaxis: {
@@ -132,21 +96,19 @@
             };
         }
         
-        $("#temperaturebutton").click(function(){
-            plotChart("Temperature");
-        });
-        
-        $("#energybutton").click(function(){
-            plotChart("Energy");
-        });
+        function msToHMS( ms ) {
+            // 1- Convert to seconds:
+            var seconds = ms / 1000;
+            // 2- Extract hours:
+            var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
+            seconds = seconds % 3600; // seconds remaining after extracting hours
+            // 3- Extract minutes:
+            var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
+            // 4- Keep only seconds not extracted to minutes:
+            seconds = seconds % 60;
+            return( hours+":"+minutes+":"+seconds);
+        }
 
-        $("#humiditybutton").click(function(){
-            plotChart("Humidity");
-        });
-	
-	kibanaQuery1();
-	kibanaQuery2();
-	setInterval(function(){ kibanaQuery1(); }, 60000);
-	setInterval(function(){ kibanaQuery2(); }, 60000);
+        setInterval(function(){ kibanaQuery2(); }, 60000);
         plotChart("Energy");
 })(jQuery);
