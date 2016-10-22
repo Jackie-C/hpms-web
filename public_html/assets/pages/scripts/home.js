@@ -1,16 +1,18 @@
 (function($) {
+	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
 	var jsonObject1 = null;
 	var jsonObject2 = null;
 
     function kibanaQuery1() {
 
         $.ajax({
-		url: "/kibana/elasticsearch/hms-homeuser1-*/_search",
+		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
 		contentType: "application/json; charset=UTF-8",
 		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
+			"Origin": "https://hms-portal.net/kibana/elasticsearch",
 			"kbn-version": "5.0.0-beta1",
 			"accept": "application/json, text/plain, */*"
 		},
@@ -28,12 +30,13 @@
 	function kibanaQuery2() {
 
         $.ajax({
-		url: "/kibana/elasticsearch/hms-*/_search",
+		url: apiURL + "/hms-*/_search",
 		type: "POST",
 		contentType: "application/json; charset=UTF-8",
 		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
+			"Origin": "https://hms-portal.net/kibana/elasticsearch",
 			"kbn-version": "5.0.0-beta1",
 			"accept": "application/json, text/plain, */*"
 		},
