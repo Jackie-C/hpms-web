@@ -12,7 +12,6 @@
 		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
-			"Origin": "https://hms-portal.net/kibana/elasticsearch",
 			"kbn-version": "5.0.0-beta1",
 			"accept": "application/json, text/plain, */*"
 		},
@@ -36,7 +35,6 @@
 		dataType: 'json',
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
-			"Origin": "https://hms-portal.net/kibana/elasticsearch",
 			"kbn-version": "5.0.0-beta1",
 			"accept": "application/json, text/plain, */*"
 		},
