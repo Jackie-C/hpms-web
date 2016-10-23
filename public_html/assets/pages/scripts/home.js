@@ -15,7 +15,7 @@
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
 			"kbn-version": "5.0.0-beta1",
-			"accept": "application/json, text/plain, */*"
+			"accept": "*/*"
 		},
 		data: JSON.stringify(
 		{"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"range":{"timestamp":{"gte":1451566800000,"lte":1483189199999,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{"1":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"2":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"3":{"avg":{"field":"temperature"}},"4":{"avg":{"field":"humidity"}},"5":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"6":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"7":{"avg":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}},"8":{"cardinality":{"field":"sensorName.keyword"}},"9":{"sum":{"script":{"inline":"(doc['voltage'].value * doc['current'].value * 0.25) / 1000","lang":"expression"}}}}}
@@ -38,7 +38,7 @@
 		headers: {
 			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
 			"kbn-version": "5.0.0-beta1",
-			"accept": "application/json, text/plain, */*"
+			"accept": "*/*"
 		},
 		data: JSON.stringify(
 		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":"sensorName: \"Kitchen Ambient\"","analyze_wildcard":true}},{"range":{"timestamp":{"gte":"now-30d","to":"now"}}}],"must_not":[]}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value","lang":"expression"}}},"cumulative_day":{"cumulative_sum":{"buckets_path":"hourly_avg"}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value * 0.25","lang":"expression"}}},"cumulative_day_cost":{"cumulative_sum":{"buckets_path":"hourly_avg_cost"}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"cumulative_monthly_total":{"cumulative_sum":{"buckets_path":"daily_total"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}},"cumulative_monthly_total_cost":{"cumulative_sum":{"buckets_path":"daily_total_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
