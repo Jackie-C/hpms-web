@@ -47,6 +47,7 @@
 			jsonObject2 = data;
 			console.log(jsonObject2);
 			updateValues2();
+                        plotChart("Energy");
 		}
 		});
     }
@@ -148,5 +149,4 @@
 	kibanaQuery2();
 	setInterval(function(){ kibanaQuery1(); }, 60000);
 	setInterval(function(){ kibanaQuery2(); }, 60000);
-        plotChart("Energy");
 })(jQuery);
