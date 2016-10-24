@@ -70,7 +70,7 @@
                 lines: { 
                     show: true, 
                     fill: true,
-                    fillColor: '#ED3B46'
+                    fillColor: 'rgba(237, 59, 71, 0.4)'
                 },
                 points: { show: true }
             },
