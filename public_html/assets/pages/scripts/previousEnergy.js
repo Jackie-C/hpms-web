@@ -114,7 +114,7 @@
 				show: true
 			},
 		xaxes: [{
-				axisLabel: 'Date & Time'
+				axisLabel: 'Date & Time (UTC)'
 			}],
 		yaxes: [{
 				position: 'left',
