@@ -57,6 +57,7 @@
             });
             
             var peakUsageDateTime = new Date(highestUsageTime);
+            console.log(lowestUsageValue);
             var lowestUsageDateTime = new Date (lowestUsageTime);
             $("#minTemp").text(Math.round(lowestUsageValue)+ '\xB0C' + " " + lowestUsageDateTime.getUTCHours() + ":" + (lowestUsageDateTime.getUTCMinutes()<10?'0':'') + lowestUsageDateTime.getUTCMinutes());
             $("#maxTemp").text(Math.round(highestUsageValue)+ '\xB0C' + " " + peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
