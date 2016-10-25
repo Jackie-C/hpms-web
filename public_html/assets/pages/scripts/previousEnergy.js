@@ -2,7 +2,7 @@
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
 	var jsonObject2 = null;
 
-	function kibanaQuery2() {
+	function getPower() {
         $.ajax({
 		url: apiURL + "/hms-*/_search",
 		type: "POST",
@@ -14,23 +14,24 @@
 			"accept": "*/*"
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":"sensorName: \"Kitchen Ambient\"","analyze_wildcard":true}},{"range":{"timestamp":{"gte":"now-30d","to":"now"}}}],"must_not":[]}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"cumulative_day":{"cumulative_sum":{"buckets_path":"hourly_avg"}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}},"cumulative_day_cost":{"cumulative_sum":{"buckets_path":"hourly_avg_cost"}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"cumulative_monthly_total":{"cumulative_sum":{"buckets_path":"daily_total"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}},"cumulative_monthly_total_cost":{"cumulative_sum":{"buckets_path":"daily_total_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
+		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-20"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
 		),
 		success: function(data) {
 			jsonObject2 = data;
 			console.log(jsonObject2);
-			updateValues2();
-			plotChart("Energy");
+			var arrayElement = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets.length;
+			updatePowerElements(arrayElement);
+			plotChart("Energy", arrayElement);
 		}
 		});
     }
 	
-	function updateValues2() {
-		$("#previousDayCost").text("$ " + Math.round10(jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[0].daily_total_cost.value, -2));
+	function updatePowerElements(arrayElement) {
+		$("#previousDayCost").text("$ " + Math.round10(jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[arrayElement-2].daily_total_cost.value, -2).toFixed(2));
 	}
         
-        function getChartData(){
-            var currentDayBuckets = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[0];
+        function getChartData(arrayElement){
+            var currentDayBuckets = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[arrayElement-2];
             var chartFormatted = new Array();
             var highestUsageValue = 0;
             var highestUsageTime;
@@ -52,10 +53,10 @@
             return chartFormatted;
         }
         
-        function plotChart(category){
+        function plotChart(category, arrayElement){
             var placeholder = $("#chart_4");
             
-            var data = getChartData();
+            var data = getChartData(arrayElement);
             
             var dataset = [ { label: category + " Usage", data: data }];
             
@@ -93,8 +94,8 @@
             };
         }
         
-	kibanaQuery2();
-	setInterval(function(){ kibanaQuery2(); }, 60000);
+	getPower();
+	setInterval(function(){ getPower(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions
