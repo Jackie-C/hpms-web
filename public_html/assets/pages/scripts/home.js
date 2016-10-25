@@ -2,7 +2,6 @@
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject = null;
 	var weatherJsonObject = null;
-	var hardcodeJsonObject = null;
 	var chartSelection = null;
         
 	function getPower() {
@@ -54,28 +53,6 @@
 		});
     }
 	
-	function getHardcode() {
-        $.ajax({
-		url: apiURL + "/hms-homeuser1-*/_search",
-		type: "POST",
-		contentType: "application/json; charset=UTF-8",
-		dataType: 'json',
-		headers: {
-			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
-			"kbn-version": "5.0.0-beta1",
-			"accept": "*/*"
-		},
-		data: JSON.stringify(
-		{"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"range":{"timestamp":{"gte":1451566800000,"lte":1483189199999,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{"1":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"2":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"3":{"avg":{"field":"temperature"}},"4":{"avg":{"field":"humidity"}},"5":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"6":{"sum":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"7":{"avg":{"script":{"inline":"(doc['voltage'].value * doc['current'].value / 1000 * 0.28)","lang":"expression"}}},"8":{"cardinality":{"field":"sensorName.keyword"}},"9":{"sum":{"script":{"inline":"(doc['voltage'].value * doc['current'].value /1000 * 0.28)","lang":"expression"}}}}}
-		),
-		success: function(data) {
-			hardcodeJsonObject = data;
-			console.log(hardcodeJsonObject);
-			updateHardcodeElements();
-		}
-		});
-    }
-	
 	function updatePowerElements(totalDays) {
 		$("#currentEnergyUsage").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -2));
 		$("#previousDayEnergyUsage").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -2));
@@ -89,7 +66,7 @@
 	}
 	
 	function updateHardcodeElements() {
-		$("#changeMonthlyConsumption").text((Math.round(hardcodeJsonObject.aggregations["5"].value) / Math.round(hardcodeJsonObject.aggregations["6"].value) * 100) + " %");
+		$("#changeMonthlyConsumption").text("50 %");
 		$("#largestConsumption").text("Television");
 	}
         
@@ -179,12 +156,11 @@
 	//Get data on page load
 	getPower();
 	getWeather();
-	getHardcode();
+	updateHardcodeElements();
 	
 	//Auto-refresh every 60 seconds
 	setInterval(function(){ getPower(); }, 60000); 
 	setInterval(function(){ getWeather(); }, 60000);
-	setInterval(function(){ getHardcode(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions
