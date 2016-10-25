@@ -4,7 +4,7 @@
 
 	function getPower() {
         $.ajax({
-		url: apiURL + "/hms-*/_search",
+		url: apiURL + "/hms-homeuser1-2016-09-*/_search",
 		type: "POST",
 		contentType: "application/json; charset=UTF-8",
 		dataType: 'json',
@@ -14,24 +14,24 @@
 			"accept": "*/*"
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-20"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
+		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-24"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
 		),
 		success: function(data) {
 			jsonObject2 = data;
 			console.log(jsonObject2);
-			var arrayElement = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets.length;
-			updatePowerElements(arrayElement);
-			plotChart("Energy", arrayElement);
+			var totalDays = jsonObject2.aggregations.per_month.buckets[0].per_day.buckets.length;
+			updatePowerElements(totalDays);
+			plotChart("Energy", totalDays);
 		}
 		});
     }
 	
-	function updatePowerElements(arrayElement) {
-		$("#dailyRunningTotal").text("$ " + Math.round10(jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[arrayElement-1].daily_total_cost.value, -2).toFixed(2));
+	function updatePowerElements(totalDays) {
+		$("#dailyRunningTotal").text("$ " + Math.round10(jsonObject2.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value, -2).toFixed(2));
 	}
         
-        function getChartData(arrayElement){
-            var currentDayBuckets = jsonObject2.aggregations["per_month"].buckets[0].per_day.buckets[arrayElement-1];
+        function getChartData(totalDays){
+            var currentDayBuckets = jsonObject2.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1];
             var chartFormatted = new Array();
             var highestUsageValue = 0;
             var highestUsageTime;
@@ -53,15 +53,11 @@
             return chartFormatted;
         }
         
-        function plotChart(category, arrayElement){
+        function plotChart(category, totalDays){
             var placeholder = $("#chart_4");
-            
-            var data = getChartData(arrayElement);
-            
+            var data = getChartData(totalDays);
             var dataset = [ { label: category + " Usage", data: data }];
-            
             var options = getChartOption(category);
-            
             $.plot(placeholder, dataset, options);
         }
         
@@ -85,17 +81,18 @@
                     show: true
                 },
             xaxes: [{
-                    axisLabel: 'Date & Time'
+                    axisLabel: 'Date & Time (UTC)'
                 }],
             yaxes: [{
                     position: 'left',
-                    axisLabel: category
+                    axisLabel: category + ' (kWh)'
                 }]
             };
         }
         
-	getPower();
-	setInterval(function(){ getPower(); }, 60000);
+	getPower(); //Get data on page load
+	
+	setInterval(function(){ getPower(); }, 60000); //Auto-refresh every 60 seconds
 })(jQuery);
 
 //Decimal rounding functions
