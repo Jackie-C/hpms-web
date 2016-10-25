@@ -600,11 +600,11 @@ License: You must have a valid license purchased only from themeforest(the above
 								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile">
 									<div  class = "tile" style = "background-color:white;">
 										<div id= "exportto1">    
-											<a class="btn btn-lg red"> EXPORT TO CSV
+											<a class="btn btn-lg red" href ="WAVE.csv"> EXPORT TO CSV
 												<i class="fa fa-edit"></i></a>
 										</div>
 										<div id= "exportto2" style="padding-top: 20px;">                                    
-											<a class="btn btn-lg red" > EXPORT TO PDF
+											<a class="btn btn-lg red" href="javascript:exportToPDF()"> EXPORT TO PDF
 												<i class="fa fa-edit"></i></a>
 										</div>
 									</div>                                          
@@ -612,7 +612,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								
 								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile" style = "background-color:white;">
                                     <div id= "exportto3">                                    
-											<a class="btn btn-lg red" > EXPORT TO PDF
+											<a class="btn btn-lg red" href="javascript:exportToPDF()"> EXPORT TO PDF
 												<i class="fa fa-edit"></i></a>
 										</div>
                                 </div>
@@ -780,6 +780,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/layouts/global/scripts/quick-nav.min.js" type="text/javascript"></script>
 	
 	<!-- END THEME LAYOUT SCRIPTS -->
+    <script src="assets/global/plugins/jspdf.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/html2canvas.js" type="text/javascript"  type="text/javascript" ></script>
 </body>
 </html>
 
@@ -858,3 +860,18 @@ License: You must have a valid license purchased only from themeforest(the above
         font-size: 75% !important
     }
 </style>
+
+<script type="text/javascript">
+        function exportToPDF(){
+            html2canvas(document.body, {
+                onrendered:function(canvas){
+                    var doc = new jsPDF('landscape', 'mm', 'a4');
+                    var width = doc.internal.pageSize.width; 
+                    var height = doc.internal.pageSize.height;
+                    doc.addImage(canvas, 'JPEG', 0,25, width, height-50);
+                    doc.save('Humidity.pdf');
+                    
+                }
+            });            
+        }
+    </script>
