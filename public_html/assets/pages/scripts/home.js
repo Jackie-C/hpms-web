@@ -3,7 +3,8 @@
 	var powerJsonObject = null;
 	var weatherJsonObject = null;
 	var hardcodeJsonObject = null;
-	
+	var chartSelection = null;
+        
 	function getPower() {
         $.ajax({
 		url: apiURL + "/hms-homeuser1-2016-09-*/_search",
@@ -23,7 +24,8 @@
 			console.log(powerJsonObject);
 			var totalDays = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets.length;
 			updatePowerElements(totalDays);
-			plotChart("Energy");
+                        plotChart("Energy");
+                        
 		}
 		});
     }
@@ -138,11 +140,19 @@
         }
         
         function plotChart(category) {
-            var placeholder = $("#chart_poc");
-            var data = getChartData(category.toLowerCase());
-            var dataset = [ { label: category + " Usage", data: data }];
-            var options = getChartOption(category.toLowerCase());
-            $.plot(placeholder, dataset, options);
+            if (chartSelection === null){
+                var placeholder = $("#chart_poc");
+                var data = getChartData(category.toLowerCase());
+                var dataset = [ { label: category + " Usage", data: data }];
+                var options = getChartOption(category.toLowerCase());
+                $.plot(placeholder, dataset, options);
+            } else {
+                var placeholder = $("#chart_poc");
+                var data = getChartData(chartSelection.toLowerCase());
+                var dataset = [ { label: chartSelection + " Usage", data: data }];
+                var options = getChartOption(chartSelection.toLowerCase());
+                $.plot(placeholder, dataset, options);
+            }
         }
         
         function getChartOption(category) {
@@ -154,17 +164,20 @@
         }
         
         $("#energybutton").click(function() {
+            chartSelection = "Energy";
             plotChart("Energy");
         });
 		
-		$("#temperaturebutton").click(function() {
+        $("#temperaturebutton").click(function() {
+            chartSelection = "Temperature";
             plotChart("Temperature");
         });
 
         $("#humiditybutton").click(function() {
+            chartSelection = "Humidity";
             plotChart("Humidity");
         });
-	
+        
 	//Get data on page load
 	getPower();
 	getWeather();
