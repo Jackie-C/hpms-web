@@ -86,6 +86,7 @@
                 mode: "time",
                 timeformat: "%d/%m/%y %H:%M",
                 minTickSize: [1, "hour"],
+                labelWidth: 10
                 //timezone: "browser"
             },
             axisLabels: {
