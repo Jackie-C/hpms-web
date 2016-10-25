@@ -48,8 +48,8 @@
 			var totalDays = weatherJsonObject.aggregations.per_day.buckets.length;
 			var totalHours = weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets.length;
 			updateWeatherElements(totalDays, totalHours);
-			//plotChart("Temperature");
-			//plotChart("Humidity");
+//			plotChart("Temperature");
+//			plotChart("Humidity");
 		}
 		});
     }
@@ -109,11 +109,31 @@
                     });
                     return chartFormatted;
                 case "temperature":
-                    // TODO: awaiting api call for temperature
-                    // SEE ENERGY FOR IMPLEMENTATIONS
+                    var perDayTempBuckets = weatherJsonObject.aggregations.per_day.buckets;
+                    var temperatureChartData = new Array();
+                    
+                    $.each(perDayTempBuckets, function(index, value){
+                       $.each(value.per_hour.buckets, function(index, value){
+                           var temperaturePerHour = new Array();
+                           temperaturePerHour.push(value.key);
+                           temperaturePerHour.push(value.temperature.value);
+                           temperatureChartData.push(temperaturePerHour);
+                       });
+                    });
+                    return temperatureChartData;
                 case "humidity":
-                    // TODO: awaiting api call for temperature
-                    // SEE ENERGY FOR IMPLEMENTATIONS
+                    var perDayHumidityBuckets = weatherJsonObject.aggregations.per_day.buckets;
+                    var humidityChartData = new Array();
+                    
+                    $.each(perDayHumidityBuckets, function(index, value){
+                       $.each(value.per_hour.buckets, function(index, value){
+                           var humidityPerHour = new Array();
+                           humidityPerHour.push(value.key);
+                           humidityPerHour.push(value.humidity.value);
+                           humidityChartData.push(humidityPerHour);
+                       });
+                    });
+                    return humidityChartData;
             }
         }
         
