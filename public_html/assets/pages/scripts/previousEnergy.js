@@ -90,8 +90,17 @@
 		var data = getChartData(totalDays);
 		var dataset = [ { label: category + " Usage", data: data }];
 		var options = getChartOption(category);
+                changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
+        
+        // to prevent overlapping of x-axis labels.
+         // 415 is to handle iphone 6 plus or nexus 5X
+        function changeTicksSizeOnMobile(options){
+            if ($(window).width() < 415){
+                options.xaxis.ticks = 3;
+            }
+        }
 	
 	function getChartOption(category){
 		return options = {
@@ -107,7 +116,7 @@
 			mode: "time",
 			timeformat: "%d/%m/%y %H:%M",
 			minTickSize: [1, "hour"],
-			labelWidth: 10
+			labelWidth: 50
 			//timezone: "browser"
 		},
 		axisLabels: {

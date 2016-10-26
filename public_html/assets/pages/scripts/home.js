@@ -3,6 +3,7 @@
 	var powerJsonObject = null;
 	var weatherJsonObject = null;
 	var chartSelection = null;
+        var plot = null;
         
 	function getPower() {
         $.ajax({
@@ -123,24 +124,34 @@
 			var data = getChartData(category.toLowerCase());
 			var dataset = [ { label: category + " Usage", data: data }];
 			var options = getChartOption(category.toLowerCase());
-			$.plot(placeholder, dataset, options);
+                        changeTicksSizeOnMobile(options);
+			plot = $.plot(placeholder, dataset, options);
 		} else {
 			var placeholder = $("#chart_poc");
 			var data = getChartData(chartSelection.toLowerCase());
 			var dataset = [ { label: chartSelection + " Usage", data: data }];
 			var options = getChartOption(chartSelection.toLowerCase());
-			$.plot(placeholder, dataset, options);
+                        changeTicksSizeOnMobile(options);
+			plot = $.plot(placeholder, dataset, options);
 		}
 	}
 	
 	function getChartOption(category) {
 		switch (category) {
-			case "energy": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 10},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Energy (kWh)'}]};
-			case "temperature": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 10},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Temperature (°C)'}]};
-			case "humidity": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 10},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Humidity (%)'}]};
+			case "energy": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Energy (kWh)'}]};
+			case "temperature": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Temperature (°C)'}]};
+			case "humidity": return options={series:{lines:{show:true,fill:true},points:{show:true}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Humidity (%)'}]};
 		}
 	}
-	
+        
+        // to prevent overlapping of x-axis labels.
+        // 415 is to handle iphone 6 plus or nexus 5X
+        function changeTicksSizeOnMobile(options){
+            if ($(window).width() < 415){
+                options.xaxis.ticks = 3;
+            }
+        }
+        
 	$("#energybutton").click(function() {
 		chartSelection = "Energy";
 		plotChart("Energy");
