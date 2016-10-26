@@ -608,7 +608,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												<i class="fa fa-edit"></i></a>
 										</div>
 										<div id= "exportto2" style="padding-top: 20px;">                                    
-											<a class="btn btn-lg red" href="javascript:exportToPDF()"> EXPORT TO PDF
+											<a class="btn btn-lg red"> EXPORT TO PDF
 												<i class="fa fa-edit"></i></a>
 										</div>
 									</div>                                        
@@ -616,7 +616,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								
 								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 bottomrowtile" style = "background-color:white;">
                                     <div id= "exportto3">                                    
-											<a class="btn btn-lg red" href="javascript:exportToPDF()"> EXPORT TO PDF
+											<a class="btn btn-lg red"> EXPORT TO PDF
 												<i class="fa fa-edit"></i></a>
 										</div>
                                 </div>
@@ -866,17 +866,21 @@ License: You must have a valid license purchased only from themeforest(the above
     }
 </style>
 
-<script type="text/javascript">
-        function exportToPDF(){
+<script>
+    $(document).ready(function(){
+        $("#exportto2, #exportto3").click(function(){
             html2canvas(document.body, {
-                onrendered:function(canvas){
-                    var doc = new jsPDF('landscape', 'mm', 'a4');
-                    var width = doc.internal.pageSize.width; 
-                    var height = doc.internal.pageSize.height;
-                    doc.addImage(canvas, 'JPEG', 0,25, width, height-50);
-                    doc.save('CurrentEnergy.pdf');
+                onrendered: function(canvas) {         
+                    var imgData = canvas.toDataURL('image/png');              
+                    var doc = ($(window).width() > 991) ? new jsPDF('l', 'mm'):new jsPDF('p', 'mm');
+                    var screenwidth = $(window).width();
                     
+                    if (screenwidth > 334)
+                        doc.addImage(imgData, 'PNG', 0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height);
+                    else
+                        doc.addImage(imgData, 'PNG', 0, 0,  screenwidth - 140, doc.internal.pageSize.height);
+                    doc.save('CurrentEnergy.pdf');
                 }
-            });            
-        }
-    </script>
+            });          
+        })});
+</script>
