@@ -1,11 +1,13 @@
 (function($) {
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
-	var powerJsonObject = null;
-	var weatherJsonObject = null;
-        var totalWeatherDays = 0;
-        var chartSelection = "Average";
+	var powerJsonObject1 = null;
+	var powerJsonObject2 = null;
+	var weatherJsonObject1 = null;
+	var weatherJsonObject2 = null;
+	var totalWeatherDays = 0;
+	var chartSelection = "Average";
         
-	function getPower() {
+	function getPowerHourly() {
         $.ajax({
 		url: apiURL + "/hms-homeuser1-2016-09-*/_search",
 		type: "POST",
@@ -20,15 +22,15 @@
 		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-24"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
 		),
 		success: function(data) {
-			powerJsonObject = data;
-			console.log(powerJsonObject);
-			var totalDays = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets.length;
+			powerJsonObject1 = data;
+			console.log(powerJsonObject1);
+			var totalDays = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets.length;
 			updatePowerElements(totalDays);
 		}
 		});
     }
 	
-	function getWeather() {
+	function getWeatherHourly() {
         $.ajax({
 		url: apiURL + "/hms-*/_search",
 		type: "POST",
@@ -40,31 +42,52 @@
 			"accept": "*/*"
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-7d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-3d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
 		),
 		success: function(data) {
-			weatherJsonObject = data;
-			console.log(weatherJsonObject);
-			totalWeatherDays = weatherJsonObject.aggregations.per_day.buckets.length;
-			var totalHours = weatherJsonObject.aggregations.per_day.buckets[totalWeatherDays-1].per_hour.buckets.length;
-			updateWeatherElements(totalWeatherDays, totalHours);
+			weatherJsonObject1 = data;
+			console.log(weatherJsonObject1);
+			totalWeatherDays = weatherJsonObject1.aggregations.per_day.buckets.length;
 			plotChart(totalWeatherDays);
 		}
 		});
     }
 	
+	function getWeatherPerMinute() {
+        $.ajax({
+		url: apiURL + "/hms-*/_search",
+		type: "POST",
+		contentType: "application/json; charset=UTF-8",
+		dataType: 'json',
+		headers: {
+			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
+			"kbn-version": "5.0.0-beta1",
+			"accept": "*/*"
+		},
+		data: JSON.stringify(
+		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-3h","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
+		),
+		success: function(data) {
+			weatherJsonObject2 = data;
+			console.log(weatherJsonObject2);
+			var totalMinutes = weatherJsonObject2.aggregations.per_minute.buckets.length;
+			updateWeatherElements(totalMinutes);
+		}
+		});
+    }
+	
 	function updatePowerElements(totalDays) {
-		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
-		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
+		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
+		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
 	}
 	
-	function updateWeatherElements(totalDays, totalHours) {
-		$("#temperatureBadge").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].temperature.value) + "°C");
-		$("#humidityBadge").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].humidity.value) + "%");
+	function updateWeatherElements(totalMinutes) {
+		$("#temperatureBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value) + "°C");
+		$("#humidityBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value) + "%");
 	}
 	
 	function getChartData(totalDays){
-		var currentDayBuckets = weatherJsonObject.aggregations.per_day.buckets[totalDays-1];
+		var currentDayBuckets = weatherJsonObject1.aggregations.per_day.buckets[totalDays-1];
 		var chartFormatted = new Array();
 		var highestUsageValue = 0;
 		var highestUsageTime;
@@ -160,11 +183,11 @@
                     break;
                 case "Bedroom":
                     chartSelection = "Bedroom";
-                    plotChart(totalWeatherDays - 5);
+                    plotChart(totalWeatherDays - 2);
                     break;
                 case "Lounge":
                     chartSelection = "Lounge";
-                    plotChart(totalWeatherDays - 6);
+                    plotChart(totalWeatherDays - 3);
                     break;
                 default:
                     alert("choice is not supported");
@@ -173,12 +196,17 @@
         });
         
 	//Get data on page load
-	getPower();
-	getWeather();
+	getPowerHourly();
+	getWeatherHourly();
+	getWeatherPerMinute();
+	
+	//Auto-refresh every 60 minutes
+	setInterval(function(){ getPowerHourly(); }, 3600000); 
+	setInterval(function(){ getWeatherHourly(); }, 3600000);
 	
 	//Auto-refresh every 60 seconds
-	setInterval(function(){ getPower(); }, 60000); 
-	setInterval(function(){ getWeather(); }, 60000);
+	setInterval(function(){ getWeatherPerMinute(); }, 60000); 
+	//setInterval(function(){ getPowerPerMinute(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions

@@ -1,11 +1,13 @@
 (function($) {
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
-	var powerJsonObject = null;
-	var weatherJsonObject = null;
+	var powerJsonObject1 = null;
+	var powerJsonObject2 = null;
+	var weatherJsonObject1 = null;
+	var weatherJsonObject2 = null;
 	var chartSelection = null;
-        var plot = null;
+	var plot = null;
         
-	function getPower() {
+	function getPowerHourly() {
         $.ajax({
 		url: apiURL + "/hms-homeuser1-2016-09-*/_search",
 		type: "POST",
@@ -20,16 +22,16 @@
 		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-24"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
 		),
 		success: function(data) {
-			powerJsonObject = data;
-			console.log(powerJsonObject);
-			var totalDays = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets.length;
+			powerJsonObject1 = data;
+			console.log(powerJsonObject1);
+			var totalDays = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets.length;
 			updatePowerElements(totalDays);
 			plotChart("Energy");
 		}
 		});
     }
 	
-	function getWeather() {
+	function getWeatherHourly() {
         $.ajax({
 		url: apiURL + "/hms-*/_search",
 		type: "POST",
@@ -41,32 +43,52 @@
 			"accept": "*/*"
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-7d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
 		),
 		success: function(data) {
-			weatherJsonObject = data;
-			console.log(weatherJsonObject);
-			var totalDays = weatherJsonObject.aggregations.per_day.buckets.length;
-			var totalHours = weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets.length;
-			updateWeatherElements(totalDays, totalHours);
+			weatherJsonObject1 = data;
+			console.log(weatherJsonObject1);
+		}
+		});
+    }
+	
+	function getWeatherPerMinute() {
+        $.ajax({
+		url: apiURL + "/hms-*/_search",
+		type: "POST",
+		contentType: "application/json; charset=UTF-8",
+		dataType: 'json',
+		headers: {
+			"Authorization": "Basic ZWxhc3RpYzpjaGFuZ2VtZQ==",
+			"kbn-version": "5.0.0-beta1",
+			"accept": "*/*"
+		},
+		data: JSON.stringify(
+		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-3h","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
+		),
+		success: function(data) {
+			weatherJsonObject2 = data;
+			console.log(weatherJsonObject2);
+			var totalMinutes = weatherJsonObject2.aggregations.per_minute.buckets.length;
+			updateWeatherElements(totalMinutes);
 		}
 		});
     }
 	
 	function updatePowerElements(totalDays) {
-		$("#currentEnergyUsage").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -2));
-		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
-		$("#previousDayEnergyUsage").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -2));
-		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
-		$("#dailyRunningTotal").text("$ " + Math.round10(powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value, -2).toFixed(2));
-		$("#monthlyRunningTotal").text("$ " + Math.round10(powerJsonObject.aggregations.per_month.buckets[0].monthly_total_cost.value, -2).toFixed(2));
+		$("#currentEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -2));
+		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
+		$("#previousDayEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -2));
+		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
+		$("#dailyRunningTotal").text("$ " + Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value, -2).toFixed(2));
+		$("#monthlyRunningTotal").text("$ " + Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].monthly_total_cost.value, -2).toFixed(2));
 	}
 	
-	function updateWeatherElements(totalDays, totalHours) {
-		$("#temperature").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].temperature.value));
-		$("#temperatureBadge").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].temperature.value) + "°C");
-		$("#humidity").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].humidity.value));
-		$("#humidityBadge").text(Math.round(weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets[totalHours-1].humidity.value) + "%");
+	function updateWeatherElements(totalMinutes) {
+		$("#temperature").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value));
+		$("#temperatureBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value) + "°C");
+		$("#humidity").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value));
+		$("#humidityBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value) + "%");
 	}
 	
 	function updateHardcodeElements() {
@@ -77,7 +99,7 @@
 	function getChartData(category) {
 		switch(category) {
 			case "energy":
-				var perDayBuckets = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets;
+				var perDayBuckets = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets;
 				var chartFormatted = new Array();
 				
 				$.each(perDayBuckets, function(index, value){
@@ -90,7 +112,7 @@
 				});
 				return chartFormatted;
 			case "temperature":
-				var perDayTempBuckets = weatherJsonObject.aggregations.per_day.buckets;
+				var perDayTempBuckets = weatherJsonObject1.aggregations.per_day.buckets;
 				var temperatureChartData = new Array();
 				
 				$.each(perDayTempBuckets, function(index, value){
@@ -103,7 +125,7 @@
 				});
 				return temperatureChartData;
 			case "humidity":
-				var perDayHumidityBuckets = weatherJsonObject.aggregations.per_day.buckets;
+				var perDayHumidityBuckets = weatherJsonObject1.aggregations.per_day.buckets;
 				var humidityChartData = new Array();
 				
 				$.each(perDayHumidityBuckets, function(index, value){
@@ -141,7 +163,7 @@
 			case "energy": return options={series:{lines:{show:true,fill:true},points:{show:false, radius: 2}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Energy (kWh)'}]};
 			case "temperature": return options={series:{lines:{show:true,fill:true},points:{show:false, radius: 2}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Temperature (°C)'}]};
 			case "humidity": return options={series:{lines:{show:true,fill:true},points:{show:false, radius: 2}},xaxis:{mode:"time",timeformat:"%d/%m/%y %H:%M",minTickSize:[1,"hour"],labelWidth: 50},axisLabels:{show:true},xaxes:[{axisLabel:'Date & Time (UTC)'}],yaxes:[{position:'left',axisLabel:'Humidity (%)'}]};
-		}
+  		}
 	}
         
         // to prevent overlapping of x-axis labels.
@@ -168,13 +190,18 @@
 	});
         
 	//Get data on page load
-	getPower();
-	getWeather();
+	getPowerHourly();
+	getWeatherHourly();
+	getWeatherPerMinute();
 	updateHardcodeElements();
 	
+	//Auto-refresh every 60 minutes
+	setInterval(function(){ getPowerHourly(); }, 3600000); 
+	setInterval(function(){ getWeatherHourly(); }, 3600000);
+	
 	//Auto-refresh every 60 seconds
-	setInterval(function(){ getPower(); }, 60000); 
-	setInterval(function(){ getWeather(); }, 60000);
+	setInterval(function(){ getWeatherPerMinute(); }, 60000); 
+	//setInterval(function(){ getPowerPerMinute(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions
