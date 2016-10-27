@@ -2,6 +2,8 @@
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject = null;
 	var weatherJsonObject = null;
+        var totalPowerDays = 0;
+        var chartSelection = "Average";
 
 	function getPower() {
         $.ajax({
@@ -20,9 +22,9 @@
 		success: function(data) {
 			powerJsonObject = data;
 			console.log(powerJsonObject);
-			var totalDays = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets.length;
-			updatePowerElements(totalDays);
-			plotChart("Energy", totalDays);
+			totalPowerDays = powerJsonObject.aggregations.per_month.buckets[0].per_day.buckets.length;
+			updatePowerElements(totalPowerDays);
+			plotChart(totalPowerDays);
 		}
 		});
     }
@@ -85,11 +87,11 @@
 		return chartFormatted;
 	}
 	
-	function plotChart(category, totalDays){
+	function plotChart(totalDays){
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalDays);
-		var dataset = [ { label: category + " Usage", data: data }];
-		var options = getChartOption(category);
+		var dataset = [ { label: chartSelection + " Usage", data: data }];
+		var options = getChartOption(chartSelection);
                 changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
@@ -131,6 +133,31 @@
 			}]
 		};
 	}
+        
+        $('#dropdown').on('change', function(){
+            var value = this.value;
+            switch(value){
+                case "Average":
+                    chartSelection = "Average";
+                    plotChart(totalPowerDays);
+                    break;
+                case "Fridge":
+                    chartSelection = "Fridge";
+                    plotChart(totalPowerDays - 1);
+                    break;
+                case "Playstation":
+                    chartSelection = "Playstation";
+                    plotChart(totalPowerDays - 5);
+                    break;
+                case "AirConditioner":
+                    chartSelection = "AirConditioner";
+                    plotChart(totalPowerDays - 6);
+                    break;
+                default:
+                    alert("choice is not supported");
+                    break;
+            }
+        });
         
 	//Get data on page load
 	getPower();

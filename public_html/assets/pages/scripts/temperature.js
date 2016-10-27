@@ -2,6 +2,8 @@
 	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject = null;
 	var weatherJsonObject = null;
+        var totalWeatherDays = 0;
+        var chartSelection = "Average";
 
 	function getPower() {
         $.ajax({
@@ -43,10 +45,10 @@
 		success: function(data) {
 			weatherJsonObject = data;
 			console.log(weatherJsonObject);
-			var totalDays = weatherJsonObject.aggregations.per_day.buckets.length;
-			var totalHours = weatherJsonObject.aggregations.per_day.buckets[totalDays-1].per_hour.buckets.length;
-			updateWeatherElements(totalDays, totalHours);
-			plotChart("Temperature", totalDays);
+			totalWeatherDays = weatherJsonObject.aggregations.per_day.buckets.length;
+			var totalHours = weatherJsonObject.aggregations.per_day.buckets[totalWeatherDays-1].per_hour.buckets.length;
+			updateWeatherElements(totalWeatherDays, totalHours);
+			plotChart(totalWeatherDays);
 		}
 		});
     }
@@ -98,11 +100,11 @@
 		return chartFormatted;
 	}
 	
-	function plotChart(category, totalDays){
+	function plotChart(totalDays){
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalDays);
-		var dataset = [ { label: category + " Usage", data: data }];
-		var options = getChartOption(category);
+		var dataset = [ { label: chartSelection + " Usage", data: data }];
+		var options = getChartOption(chartSelection);
                 changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
@@ -144,6 +146,31 @@
 			}]
 		};
 	}
+        
+        $('#dropdown').on('change', function(){
+            var value = this.value;
+            switch(value){
+                case "Average":
+                    chartSelection = "Average";
+                    plotChart(totalWeatherDays);
+                    break;
+                case "Kitchen":
+                    chartSelection = "Kitchen";
+                    plotChart(totalWeatherDays - 1);
+                    break;
+                case "Bedroom":
+                    chartSelection = "Bedroom";
+                    plotChart(totalWeatherDays - 5);
+                    break;
+                case "Lounge":
+                    chartSelection = "Lounge";
+                    plotChart(totalWeatherDays - 6);
+                    break;
+                default:
+                    alert("choice is not supported");
+                    break;
+            }
+        });
         
 	//Get data on page load
 	getPower();
