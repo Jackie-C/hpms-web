@@ -76,18 +76,18 @@
     }
 	
 	function updatePowerElements(totalDays) {
-		$("#currentEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -2));
+		$("#currentEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -2) + " kWh");
 		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
-		$("#previousDayEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -2));
+		$("#previousDayEnergyUsage").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -2) + " kWh");
 		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
 		$("#dailyRunningTotal").text("$ " + Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value, -2).toFixed(2));
 		$("#monthlyRunningTotal").text("$ " + Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].monthly_total_cost.value, -2).toFixed(2));
 	}
 	
 	function updateWeatherElements(totalMinutes) {
-		$("#temperature").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value));
+		$("#temperature").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value) + " °C");
 		$("#temperatureBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value) + "°C");
-		$("#humidity").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value));
+		$("#humidity").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value) + " %");
 		$("#humidityBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value) + "%");
 	}
 	

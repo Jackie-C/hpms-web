@@ -93,7 +93,7 @@
 		var data = getChartData(totalDays);
 		var dataset = [ { label: chartSelection + " Usage", data: data }];
 		var options = getChartOption(chartSelection);
-                changeTicksSizeOnMobile(options);
+		changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
         
@@ -113,7 +113,7 @@
 				fill: true,
 				fillColor: 'rgba(237, 59, 71, 0.4)'
 			},
-			points: { show: true }
+			points:{show:false, radius: 2}
 		},
 		xaxis: {
 			mode: "time",
@@ -135,30 +135,30 @@
 		};
 	}
         
-        $('#dropdown').on('change', function(){
-            var value = this.value;
-            switch(value){
-                case "Average":
-                    chartSelection = "Average";
-                    plotChart(totalPowerDays);
-                    break;
-                case "Fridge":
-                    chartSelection = "Fridge";
-                    plotChart(totalPowerDays + 1);
-                    break;
-                case "Playstation":
-                    chartSelection = "Playstation";
-                    plotChart(totalPowerDays - 4);
-                    break;
-                case "AirConditioner":
-                    chartSelection = "AirConditioner";
-                    plotChart(totalPowerDays - 5);
-                    break;
-                default:
-                    alert("choice is not supported");
-                    break;
-            }
-        });
+	$('#dropdown').on('change', function(){
+		var value = this.value;
+		switch(value){
+			case "Average":
+				chartSelection = "Average";
+				plotChart(totalPowerDays);
+				break;
+			case "Fridge":
+				chartSelection = "Fridge";
+				plotChart(totalPowerDays + 1);
+				break;
+			case "Playstation":
+				chartSelection = "Playstation";
+				plotChart(totalPowerDays - 4);
+				break;
+			case "AirConditioner":
+				chartSelection = "AirConditioner";
+				plotChart(totalPowerDays - 5);
+				break;
+			default:
+				alert("choice is not supported");
+				break;
+		}
+	});
         
 	//Get data on page load
 	getPowerHourly();

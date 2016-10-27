@@ -128,7 +128,7 @@
 		var data = getChartData(totalDays);
 		var dataset = [ { label: chartSelection + " Usage", data: data }];
 		var options = getChartOption(chartSelection);
-                changeTicksSizeOnMobile(options);
+		changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
         
@@ -148,7 +148,7 @@
 				fill: true,
 				fillColor: 'rgba(115, 61, 169, 0.4)'
 			},
-			points: { show: true }
+			points:{show:false, radius: 2}
 		},
 		xaxis: {
 			mode: "time",
@@ -170,30 +170,30 @@
 		};
 	}
         
-        $('#dropdown').on('change', function(){
-            var value = this.value;
-            switch(value){
-                case "Average":
-                    chartSelection = "Average";
-                    plotChart(totalWeatherDays);
-                    break;
-                case "Kitchen":
-                    chartSelection = "Kitchen";
-                    plotChart(totalWeatherDays - 1);
-                    break;
-                case "Bedroom":
-                    chartSelection = "Bedroom";
-                    plotChart(totalWeatherDays - 2);
-                    break;
-                case "Lounge":
-                    chartSelection = "Lounge";
-                    plotChart(totalWeatherDays - 3);
-                    break;
-                default:
-                    alert("choice is not supported");
-                    break;
-            }
-        });
+	$('#dropdown').on('change', function(){
+		var value = this.value;
+		switch(value){
+			case "Average":
+				chartSelection = "Average";
+				plotChart(totalWeatherDays);
+				break;
+			case "Kitchen":
+				chartSelection = "Kitchen";
+				plotChart(totalWeatherDays - 1);
+				break;
+			case "Bedroom":
+				chartSelection = "Bedroom";
+				plotChart(totalWeatherDays - 2);
+				break;
+			case "Lounge":
+				chartSelection = "Lounge";
+				plotChart(totalWeatherDays - 3);
+				break;
+			default:
+				alert("choice is not supported");
+				break;
+		}
+	});
         
 	//Get data on page load
 	getPowerHourly();
