@@ -52,7 +52,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END HEAD -->
 
 <body class=" login">
-	<!-- BEGIN LOGO -->
+<!-- BEGIN LOGO -->
 	<div class="logo">
 		<a href="home.html">
 			<img src="assets/pages/img/logo-big.png" alt="" /> </a>
@@ -411,5 +411,27 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- END PAGE LEVEL SCRIPTS -->
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
+	<script type="text/javascript">
+	function validateClient()
+	{
+	    if( document.getElementById("username").value == "elastic"
+       && document.getElementById("password").value == "changeme")
+    {
+       location.href="sensor_config.html";
+    }
+    else
+    {
+        alert( "validation failed" );
+        //location.href="sensor_config.html";
+    }
+
+	
+	}
+	
+	function loadPage()
+	{
+	location.href="home.html";
+	}
+	</script>
 </body>
 </html>
