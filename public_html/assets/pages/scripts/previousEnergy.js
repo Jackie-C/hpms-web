@@ -84,7 +84,12 @@
 		});
 		
 		var peakUsageDateTime = new Date(highestUsageTime);
-		$("#peakUsageHour").text(peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		if (highestUsageValue === 0) {
+			$("#peakUsageHour").text("Sensor Error");
+			$("#previousDayCost").text("Sensor Error");
+		} else {
+			$("#peakUsageHour").text(peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		}
 		return chartFormatted;
 	}
 	

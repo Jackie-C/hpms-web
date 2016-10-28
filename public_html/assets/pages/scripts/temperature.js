@@ -118,8 +118,16 @@
 		
 		var peakUsageDateTime = new Date(highestUsageTime);
 		var lowestUsageDateTime = new Date (lowestUsageTime);
-		$("#minTemp").text(Math.round(lowestUsageValue)+ '°C' + " at " + lowestUsageDateTime.getUTCHours() + ":" + (lowestUsageDateTime.getUTCMinutes()<10?'0':'') + lowestUsageDateTime.getUTCMinutes());
-		$("#maxTemp").text(Math.round(highestUsageValue)+ '°C' + " at " + peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		if (highestUsageValue === 0) {
+			$("#minTemp").text("Sensor Error");
+			$("#maxTemp").text("Sensor Error");
+		} else if (lowestUsageValue === 0) {
+			$("#minTemp").text("Sensor Error");
+			$("#maxTemp").text("Sensor Error");
+		} else {
+			$("#minTemp").text(Math.round(lowestUsageValue)+ '°C' + " at " + lowestUsageDateTime.getUTCHours() + ":" + (lowestUsageDateTime.getUTCMinutes()<10?'0':'') + lowestUsageDateTime.getUTCMinutes());
+			$("#maxTemp").text(Math.round(highestUsageValue)+ '°C' + " at " + peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		}
 		return chartFormatted;
 	}
 	

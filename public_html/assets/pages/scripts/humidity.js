@@ -118,8 +118,16 @@
 		
 		var peakUsageDateTime = new Date(highestUsageTime);
 		var lowestUsageDateTime = new Date (lowestUsageTime);
-		$("#minHumidity").text(Math.round(lowestUsageValue)+ '%' + " at " + lowestUsageDateTime.getUTCHours() + ":" + (lowestUsageDateTime.getUTCMinutes()<10?'0':'') + lowestUsageDateTime.getUTCMinutes());
-		$("#maxHumidity").text(Math.round(highestUsageValue)+ '%' + " at " + peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		if (highestUsageValue === 0) {
+			$("#minHumidity").text("Sensor Error");
+			$("#maxHumidity").text("Sensor Error");
+		} else if (lowestUsageValue === 0) {
+			$("#minHumidity").text("Sensor Error");
+			$("#maxHumidity").text("Sensor Error");
+		} else {
+			$("#minHumidity").text(Math.round(lowestUsageValue)+ '%' + " at " + lowestUsageDateTime.getUTCHours() + ":" + (lowestUsageDateTime.getUTCMinutes()<10?'0':'') + lowestUsageDateTime.getUTCMinutes());
+			$("#maxHumidity").text(Math.round(highestUsageValue)+ '%' + " at " + peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
+		}
 		return chartFormatted;
 	}
 	
