@@ -77,13 +77,37 @@
     }
 	
 	function updatePowerElements(totalDays) {
-		$("#currentEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value, -1) + "kWh");
-		$("#previousDayEnergyUsageBadge").text(Math.round10(powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value, -1) + "kWh");
+		var currentEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value;
+		var previousDayEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value;
+		
+		if (currentEnergyValue === null) {
+			$("#currentEnergyUsageBadge").text("N/A");
+		} else {
+			$("#currentEnergyUsageBadge").text(Math.round10(currentEnergyValue, -1) + "kWh");
+		}
+		
+		if (previousDayEnergyValue === null) {
+			$("#previousDayEnergyUsageBadge").text("N/A");
+		} else {
+			$("#previousDayEnergyUsageBadge").text(Math.round10(previousDayEnergyValue, -1) + "kWh");
+		}
 	}
 	
 	function updateWeatherElements(totalMinutes) {
-		$("#temperatureBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value) + "°C");
-		$("#humidityBadge").text(Math.round(weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value) + "%");
+		var temperatureValue = weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].temperature.value;
+		var humidityValue = weatherJsonObject2.aggregations.per_minute.buckets[totalMinutes-1].humidity.value;
+		
+		if (temperatureValue === null) {
+			$("#temperatureBadge").text("N/A");
+		} else {
+			$("#temperatureBadge").text(Math.round(temperatureValue) + "°C");
+		}
+		
+		if (humidityValue === null) {
+			$("#humidityBadge").text("N/A");
+		} else {
+			$("#humidityBadge").text(Math.round(humidityValue) + "%");
+		}
 	}
 	
 	function getChartData(totalDays){

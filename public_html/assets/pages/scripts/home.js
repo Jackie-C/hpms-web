@@ -78,7 +78,7 @@
 	function updatePowerElements(totalDays) {
 		var currentEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value;
 		var previousDayEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value;
-		var dailyCostValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value;
+		var currentCostValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value;
 		var monthlyCostValue = powerJsonObject1.aggregations.per_month.buckets[0].monthly_total_cost.value;
 		
 		if (currentEnergyValue === null) {
@@ -97,10 +97,10 @@
 			$("#previousDayEnergyUsageBadge").text(Math.round10(previousDayEnergyValue, -1) + "kWh");
 		}
 		
-		if (dailyCostValue === null) {
+		if (currentCostValue === null) {
 			$("#dailyRunningTotal").text("Sensor Error");
 		} else {
-			$("#dailyRunningTotal").text("$ " + Math.round10(dailyCostValue, -2).toFixed(2));
+			$("#dailyRunningTotal").text("$ " + Math.round10(currentCostValue, -2).toFixed(2));
 		}
 		
 		if (monthlyCostValue === null) {
