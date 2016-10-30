@@ -1,5 +1,5 @@
 (function($) {
-	var apiURL = "https://hms-portal.net/kibana/elasticsearch";
+	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject1 = null;
 	var powerJsonObject2 = null;
 	var weatherJsonObject1 = null;
@@ -16,6 +16,9 @@
 		headers: {
 			"kbn-version": "5.0.0-beta1",
 			"accept": "*/*"
+		},
+		xhrFields: {
+			withCredentials: true
 		},
 		data: JSON.stringify(
 		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-24"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
@@ -45,6 +48,9 @@
 			"kbn-version": "5.0.0-beta1",
 			"accept": "*/*"
 		},
+		xhrFields: {
+			withCredentials: true
+		},
 		data: JSON.stringify(
 		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
 		),
@@ -69,6 +75,9 @@
 		headers: {
 			"kbn-version": "5.0.0-beta1",
 			"accept": "*/*"
+		},
+		xhrFields: {
+			withCredentials: true
 		},
 		data: JSON.stringify(
 		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-3h","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
