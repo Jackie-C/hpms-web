@@ -25,7 +25,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
@@ -56,7 +56,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
