@@ -107,7 +107,6 @@
 	
 	//Auto-refresh every 60 seconds
 	setInterval(function(){ getWeatherPerMinute(); }, 60000);
-	//setInterval(function(){ getPowerPerMinute(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions

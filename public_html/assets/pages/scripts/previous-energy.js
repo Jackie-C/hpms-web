@@ -1,8 +1,6 @@
 (function($) {
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject1 = null;
-	var powerJsonObject2 = null;
-	var weatherJsonObject1 = null;
 	var weatherJsonObject2 = null;
 	var totalPowerDays = 0;
 	var chartSelection = "Average";
@@ -217,8 +215,7 @@
 	setInterval(function(){ getPowerHourly(); }, 3600000); 
 	
 	//Auto-refresh every 60 seconds
-	setInterval(function(){ getWeatherPerMinute(); }, 60000); 
-	//setInterval(function(){ getPowerPerMinute(); }, 60000);
+	setInterval(function(){ getWeatherPerMinute(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions
