@@ -1,8 +1,6 @@
 (function($) {
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject1 = null;
-	var powerJsonObject2 = null;
-	var weatherJsonObject1 = null;
 	var weatherJsonObject2 = null;
 	var totalPowerDays = 0;
 	var chartSelection = "Average";
@@ -25,7 +23,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
@@ -52,11 +50,11 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-2d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
+		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-5d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
@@ -71,7 +69,7 @@
 	function updatePowerElements(totalDays) {
 		var currentEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value;
 		var previousDayEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value;
-		var currentCostValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total_cost.value;
+		var previousDayCostValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total_cost.value;
 		
 		if (currentEnergyValue === null) {
 			$("#currentEnergyUsageBadge").text("N/A");
@@ -85,10 +83,10 @@
 			$("#previousDayEnergyUsageBadge").text(Math.round10(previousDayEnergyValue, -1) + "kWh");
 		}
 		
-		if (currentCostValue === null) {
-			$("#dailyRunningTotal").text("Sensor Error");
+		if (previousDayCostValue === null) {
+			$("#previousDayCost").text("Sensor Error");
 		} else {
-			$("#dailyRunningTotal").text("$ " + Math.round10(currentCostValue, -2).toFixed(2));
+			$("#previousDayCost").text("$ " + Math.round10(previousDayCostValue, -2).toFixed(2));
 		}
 	}
 	
@@ -110,7 +108,7 @@
 	}
         
 	function getChartData(totalDays){
-		var currentDayBuckets = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1];
+		var currentDayBuckets = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2];
 		var chartFormatted = new Array();
 		var highestUsageValue = 0;
 		var highestUsageTime;
@@ -130,24 +128,23 @@
 		var peakUsageDateTime = new Date(highestUsageTime);
 		if (highestUsageValue === 0) {
 			$("#peakUsageHour").text("Sensor Error");
-			$("#dailyRunningTotal").text("Sensor Error");
+			$("#previousDayCost").text("Sensor Error");
 		} else {
 			$("#peakUsageHour").text(peakUsageDateTime.getUTCHours() + ":" + (peakUsageDateTime.getUTCMinutes()<10?'0':'') + peakUsageDateTime.getUTCMinutes());
 		}
 		return chartFormatted;
 	}
 	
-        // TODO: need to implement which data to use when chartSelection is made.
 	function plotChart(totalDays){
-            var placeholder = $("#chart_4");
-            var data = getChartData(totalDays);
-            var dataset = [ { label: chartSelection + " Usage", data: data }];
-            var options = getChartOption(chartSelection);
-            changeTicksSizeOnMobile(options);
-            $.plot(placeholder, dataset, options);
+		var placeholder = $("#chart_4");
+		var data = getChartData(totalDays);
+		var dataset = [ { label: chartSelection + " Usage", data: data }];
+		var options = getChartOption(chartSelection);
+		changeTicksSizeOnMobile(options);
+		$.plot(placeholder, dataset, options);
 	}
         
-         // to prevent overlapping of x-axis labels.
+        // to prevent overlapping of x-axis labels.
          // 415 is to handle iphone 6 plus or nexus 5X
         function changeTicksSizeOnMobile(options){
             if ($(window).width() < 415){
@@ -161,7 +158,7 @@
 			lines: { 
 				show: true, 
 				fill: true,
-				fillColor: 'rgba(34, 137, 211, 0.4)'
+				fillColor: 'rgba(237, 59, 71, 0.4)'
 			},
 			points:{show:false, radius: 2}
 		},
@@ -194,15 +191,15 @@
 				break;
 			case "Fridge":
 				chartSelection = "Fridge";
-				plotChart(totalPowerDays - 1);
+				plotChart(totalPowerDays + 1);
 				break;
 			case "Playstation":
 				chartSelection = "Playstation";
-				plotChart(totalPowerDays - 5);
+				plotChart(totalPowerDays - 4);
 				break;
 			case "AirConditioner":
 				chartSelection = "AirConditioner";
-				plotChart(totalPowerDays - 6);
+				plotChart(totalPowerDays - 5);
 				break;
 			default:
 				alert("choice is not supported");
@@ -218,8 +215,7 @@
 	setInterval(function(){ getPowerHourly(); }, 3600000); 
 	
 	//Auto-refresh every 60 seconds
-	setInterval(function(){ getWeatherPerMinute(); }, 60000); 
-	//setInterval(function(){ getPowerPerMinute(); }, 60000);
+	setInterval(function(){ getWeatherPerMinute(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions

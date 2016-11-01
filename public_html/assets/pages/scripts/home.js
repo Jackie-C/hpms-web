@@ -25,7 +25,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
@@ -56,7 +56,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
@@ -80,11 +80,11 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-2d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
+		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-5d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/page_user_login_1')
+				window.location.replace('/login')
 			}
 		},
 		success: function(data) {
