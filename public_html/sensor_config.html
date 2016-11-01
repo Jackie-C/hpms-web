@@ -282,28 +282,35 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item start ">
-                                    <a href="current_energy" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">Current Usage</span>
-                                        <span class="badge badge-success">314Kwh</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="humidity" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">Humidity</span>
-                                        <span class="badge badge-success">10%</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="temperature" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">Temperature</span>
-                                        <span class="badge badge-danger">24°C</span>
-                                    </a>
-                                </li>
-                            </ul>
+								<li class="nav-item start ">
+									<a href="current_energy" class="nav-link ">
+										<i class="fa fa-bolt"></i>
+										<span class="title">Current Usage</span>
+										<span id = "currentEnergyUsageBadge" class="badge badge-success">kWh</span>
+									</a>
+								</li>
+								<li class="nav-item start ">
+									<a href="previous_energy" class="nav-link ">
+										<i class="icon-hourglass"></i>
+										<span class="title">Previous Usage</span>
+										<span id = "previousDayEnergyUsageBadge" class="badge badge-danger">kWh</span>
+									</a>
+								</li>
+								<li class="nav-item start ">
+									<a href="temperature" class="nav-link ">
+										<i class="icon-cloud-upload"></i>
+										<span class="title">Temperature</span>
+										<span id = "temperatureBadge" class="badge badge-success">°C</span>
+									</a>
+								</li>
+								<li class="nav-item start ">
+									<a href="humidity" class="nav-link ">
+										<i class="icon-pointer"></i>
+										<span class="title">Humidity</span>
+										<span id = "humidityBadge" class="badge badge-danger">%</span>
+									</a>
+								</li>
+							</ul>
                         </li>
                        	<li class="nav-item active ">
                                 <a class=" nav-link nav-toggle  ">
@@ -752,6 +759,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- END THEME GLOBAL SCRIPTS -->
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
 	<script src="assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
+	<script src="assets/pages/scripts/update-badge.js" type="text/javascript"></script>
 	<!-- END PAGE LEVEL SCRIPTS -->
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<script src="assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
