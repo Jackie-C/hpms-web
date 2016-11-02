@@ -1,6 +1,6 @@
 (function($) {
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
-	var powerJsonObject1 = null;
+	var hourlyPowerJson = null;
 	var weatherJsonObject1 = null;
 	var weatherJsonObject2 = null;
 	
@@ -18,7 +18,7 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"range":{"timestamp":{"gte":"2016-09-24"}}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":"deviceName: \"Total\""}},{"range":{"timestamp":{"gte":"2016-09-24"}}}],"must_not":[]}},"aggs":{"per_month":{"date_histogram":{"field":"timestamp","interval":"month","format":"YYYY-MM"},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"hourly_avg":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}},"hourly_avg_cost":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000 * 0.28","lang":"expression"}}}}},"daily_total":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg"}},"daily_total_cost":{"sum_bucket":{"buckets_path":"per_hour>hourly_avg_cost"}}}},"monthly_total":{"sum_bucket":{"buckets_path":"per_day>daily_total"}},"monthly_total_cost":{"sum_bucket":{"buckets_path":"per_day>daily_total_cost"}}}}}}
 		),
 		statusCode: {
 			401: function () {
@@ -26,10 +26,11 @@
 			}
 		},
 		success: function(data) {
-			powerJsonObject1 = data;
-			console.log(powerJsonObject1);
-			var totalPowerDays = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets.length;
-			updatePowerElements(totalPowerDays);
+			hourlyPowerJson = data;
+			console.log(hourlyPowerJson);
+			var totalMonths = hourlyPowerJson.aggregations.per_month.buckets.length;
+			var totalDays = hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets.length;
+			updatePowerElements(totalMonths, totalDays);
 		}
 		});
     }
@@ -92,9 +93,9 @@
 		});
     }
 	
-	function updatePowerElements(totalDays) {
-		var currentEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-1].daily_total.value;
-		var previousDayEnergyValue = powerJsonObject1.aggregations.per_month.buckets[0].per_day.buckets[totalDays-2].daily_total.value;
+	function updatePowerElements(totalMonths, totalDays) {
+		var currentEnergyValue = 		hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets[totalDays-1].daily_total.value;
+		var previousDayEnergyValue = 	hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets[totalDays-2].daily_total.value;
 		
 		if (currentEnergyValue === null) {
 			$("#currentEnergyUsageBadge").text("N/A");
