@@ -368,7 +368,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     <option value="AirConditioner">Air Conditioner</option>
                                                 </select>
                                             </div>
-											<div class="col-md-3 col-xs-8" style="text-align:center;">
+											<div id ="showpred" class="col-md-3 col-xs-8" >
 												<label for="">
 													<input type="checkbox" id="predictions"> Show Predictions
 												</label>
@@ -644,6 +644,9 @@ License: You must have a valid license purchased only from themeforest(the above
                     #exportto3{
                     display:none;
                     }
+					#showpred{
+						text-align:center;
+					}
 					
                     @media only screen and (max-width:1140px){
                     .valueclass{
@@ -660,6 +663,10 @@ License: You must have a valid license purchased only from themeforest(the above
                     #exportto2{
                     display:none;
                     }
+					#showpred{
+						text-align:left;
+						padding: 10px 0 0 5px;
+					}
                     }
 
                     @media only screen and (max-width:767px){
@@ -698,24 +705,17 @@ License: You must have a valid license purchased only from themeforest(the above
                             }
                         });
                     })
-                });
-            </script>
-			
-			<script>
-			$(document).ready(function(){
-				$('input').iCheck({
+					
+					$('input').iCheck('uncheck');
+					
+					$('input').iCheck({
 					checkboxClass: 'icheckbox_flat-blue'
 				})
 				
-				
-				});
-			</script>
-			
-			<script>	
-			$(document).ready(function(){			
 				$('input').on('ifChecked', function(event){
 					window.location.href = "predictions.html";
 						})
-						});
-					
-			</script>
+                });
+            </script>
+			
+			
