@@ -2,6 +2,7 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var powerJsonObject1 = null;
 	var weatherJsonObject1 = null;
+	var weatherJsonObject2 = null;
 	
 	function getPowerHourly() {
         $.ajax({
@@ -33,7 +34,7 @@
 		});
     }
 	
-	function getWeatherPerMinute() {
+	function getLatestTemperature() {
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -47,7 +48,7 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-5d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_minute":{"date_histogram":{"field":"timestamp","interval":"minute"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}
+		{"size":0,"aggs":{"latest":{"terms":{"field":"temperature","size":1,"order":{"date":"desc"}},"aggs":{"date":{"max":{"field":"timestamp"}}}}}}
 		),
 		statusCode: {
 			401: function () {
@@ -57,8 +58,36 @@
 		success: function(data) {
 			weatherJsonObject1 = data;
 			console.log(weatherJsonObject1);
-			var totalMinutes = weatherJsonObject1.aggregations.per_minute.buckets.length;
-			updateWeatherElements(totalMinutes);
+			updateTemperatureBadge();
+		}
+		});
+    }
+	
+	function getLatestHumidity() {
+        $.ajax({
+		url: apiURL + "/hms-homeuser1-*/_search",
+		type: "POST",
+		contentType: "application/json; charset=UTF-8",
+		dataType: 'json',
+		headers: {
+			"kbn-version": "5.0.0-beta1",
+			"accept": "*/*"
+		},
+		xhrFields: {
+			withCredentials: true
+		},
+		data: JSON.stringify(
+		{"size":0,"aggs":{"latest":{"terms":{"field":"humidity","size":1,"order":{"date":"desc"}},"aggs":{"date":{"max":{"field":"timestamp"}}}}}}
+		),
+		statusCode: {
+			401: function () {
+				window.location.replace('/login')
+			}
+		},
+		success: function(data) {
+			weatherJsonObject2 = data;
+			console.log(weatherJsonObject2);
+			updateHumidityBadge();
 		}
 		});
     }
@@ -81,15 +110,18 @@
 		
 	}
 	
-	function updateWeatherElements(totalMinutes) {
-		var temperatureValue = weatherJsonObject1.aggregations.per_minute.buckets[totalMinutes-1].temperature.value;
-		var humidityValue = weatherJsonObject1.aggregations.per_minute.buckets[totalMinutes-1].humidity.value;
+	function updateTemperatureBadge() {
+		var temperatureValue = weatherJsonObject1.aggregations.latest.buckets[0].key;
 		
 		if (temperatureValue === null) {
 			$("#temperatureBadge").text("N/A");
 		} else {
 			$("#temperatureBadge").text(Math.round(temperatureValue) + "°C");
 		}
+	}
+	
+	function updateHumidityBadge() {
+		var humidityValue = weatherJsonObject2.aggregations.latest.buckets[0].key;
 		
 		if (humidityValue === null) {
 			$("#humidityBadge").text("N/A");
@@ -100,13 +132,15 @@
 	
 	//Get data on page load
 	getPowerHourly();
-	getWeatherPerMinute();
+	getLatestTemperature();
+	getLatestHumidity();
 	
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);
 	
 	//Auto-refresh every 60 seconds
-	setInterval(function(){ getWeatherPerMinute(); }, 60000);
+	setInterval(function(){ getLatestTemperature(); }, 60000);
+	setInterval(function(){ getLatestHumidity(); }, 60000);
 })(jQuery);
 
 //Decimal rounding functions
