@@ -1,8 +1,8 @@
 (function($) {
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var hourlyPowerJson = null;
-	var weatherJsonObject1 = null;
-	var weatherJsonObject2 = null;
+	var temperatureBadgeJson = null;
+	var humidityBadgeJson = null;
 	
 	function getPowerHourly() {
         $.ajax({
@@ -57,8 +57,8 @@
 			}
 		},
 		success: function(data) {
-			weatherJsonObject1 = data;
-			console.log(weatherJsonObject1);
+			temperatureBadgeJson = data;
+			console.log(temperatureBadgeJson);
 			updateTemperatureBadge();
 		}
 		});
@@ -86,8 +86,8 @@
 			}
 		},
 		success: function(data) {
-			weatherJsonObject2 = data;
-			console.log(weatherJsonObject2);
+			humidityBadgeJson = data;
+			console.log(humidityBadgeJson);
 			updateHumidityBadge();
 		}
 		});
@@ -112,7 +112,7 @@
 	}
 	
 	function updateTemperatureBadge() {
-		var temperatureValue = weatherJsonObject1.aggregations.latest.buckets[0].key;
+		var temperatureValue = temperatureBadgeJson.aggregations.latest.buckets[0].key;
 		
 		if (temperatureValue === null) {
 			$("#temperatureBadge").text("N/A");
@@ -122,7 +122,7 @@
 	}
 	
 	function updateHumidityBadge() {
-		var humidityValue = weatherJsonObject2.aggregations.latest.buckets[0].key;
+		var humidityValue = humidityBadgeJson.aggregations.latest.buckets[0].key;
 		
 		if (humidityValue === null) {
 			$("#humidityBadge").text("N/A");

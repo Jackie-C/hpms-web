@@ -175,7 +175,6 @@
 	}
         
 	function getChartData(totalDays){
-		console.log(totalDays)
 		var currentDayBuckets = powerGraphJson.aggregations.per_day.buckets[totalDays-1];
 		var chartFormatted = new Array();
 		var highestUsageValue = 0;
