@@ -4,7 +4,6 @@
 	var temperatureBadgeJson = null;
 	var humidityBadgeJson = null;
 	var powerGraphJson = null;
-	var totalDays = 0;
 	var chartSelection = "Total";
 	
 	function getPowerHourly() {
@@ -111,7 +110,7 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":deviceName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":deviceName}},{"range":{"timestamp":{"gte":"now-2d","to":"now-1d"}}}]}},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}
 		),
 		statusCode: {
 			401: function () {
@@ -121,8 +120,8 @@
 		success: function(data) {
 			powerGraphJson = data;
 			console.log(powerGraphJson);
-			totalDays = powerGraphJson.aggregations.per_day.buckets.length;
-			plotChart(totalDays);
+			var totalHours = powerGraphJson.aggregations.per_hour.buckets.length;
+			plotChart(totalHours);
 		}
 		});
     }
@@ -207,8 +206,8 @@
 		}
 	}
         
-	function getChartData(totalDays){
-		var currentDayBuckets = powerGraphJson.aggregations.per_day.buckets[totalDays-2];
+	function getChartData(totalHours){
+		var currentDayBuckets = powerGraphJson.aggregations;
 		var chartFormatted = new Array();
 		var highestUsageValue = 0;
 		var highestUsageTime;
@@ -234,9 +233,9 @@
 		return chartFormatted;
 	}
 	
-	function plotChart(totalDays){
+	function plotChart(totalHours){
 		var placeholder = $("#chart_4");
-		var data = getChartData(totalDays);
+		var data = getChartData(totalHours);
 		var dataset = [ { label: chartSelection + " Usage", data: data }];
 		var options = getChartOption(chartSelection);
 		changeTicksSizeOnMobile(options);
