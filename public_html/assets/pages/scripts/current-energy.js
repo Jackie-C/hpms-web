@@ -127,6 +127,49 @@
 		});
     }
     
+    function getSensorAndPopulateToDropDown() {
+        $.ajax({
+            url: apiURL + "/hms-homeuser1-*/_search",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            headers: {
+                    "kbn-version": "5.0.0-beta1",
+                    "accept": "*/*"
+            },
+            xhrFields: {
+                    withCredentials: true
+            },
+            data: JSON.stringify(
+            {
+                "size": 0,
+                "aggs": {
+                   "1": {
+                      "terms": {
+                         "field": "deviceName.keyword",
+                         "order": {
+                            "_term": "desc"
+                         }
+                      }
+                   }
+                }
+            }),
+            statusCode: {
+                    401: function () {
+                            window.location.replace('/login');
+                    }
+            },
+            success: function(data) {
+                $.each(data.aggregations[1].buckets, function(index, value){
+                    $('#dropdown').append($('<option>', { 
+                        value: value.key,
+                        text : value.key 
+                    }));
+                });
+            }
+        });
+    }
+    
 	function updatePowerElements(totalPowerMonths, totalPowerDays) {
 		var currentEnergyValue = 		hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets[totalPowerDays-1].daily_total.value;
 		var previousDayEnergyValue = 	hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets[totalPowerDays-2].daily_total.value;
@@ -251,36 +294,9 @@
 	}
         
 	$('#dropdown').on('change', function(){
-		var value = this.value;
-		switch(value){
-			case "Total":
-				chartSelection = "Total";
-				getPowerGraph();
-				break;
-			case "Toaster":
-				chartSelection = "Toaster";
-				getPowerGraph();
-				break;
-			case "TV":
-				chartSelection = "TV";
-				getPowerGraph();
-				break;
-			case "Oven":
-				chartSelection = "Oven";
-				getPowerGraph();
-				break;
-                        case "Kettle":
-                                chartSelection = "Kettle";
-				getPowerGraph();
-                                break;
-                        case "HomeEntertainment":
-                                chartSelection = "HomeEntertainment";
-				getPowerGraph();
-                                break;
-			default:
-				alert("choice is not supported");
-				break;
-		}
+            var value = this.value;
+            chartSelection = value;
+            getPowerGraph();
 	});
         
 	//Get data on page load
@@ -288,7 +304,7 @@
 	getLatestTemperature();
 	getLatestHumidity();
 	getPowerGraph();
-	getTest();
+	getSensorAndPopulateToDropDown();
         
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);

@@ -2,7 +2,7 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
 	var totalWeatherDays = 0;
-	var chartSelection = "Average";
+	var chartSelection = "Total";
 	
 	function getWeatherHourly() {
         $.ajax({
@@ -32,6 +32,49 @@
 			plotChart(totalWeatherDays);
 		}
 		});
+    }
+    
+    function getRoomsAndPopulateToDropDown() {
+        $.ajax({
+            url: apiURL + "/hms-homeuser1-*/_search",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            headers: {
+                    "kbn-version": "5.0.0-beta1",
+                    "accept": "*/*"
+            },
+            xhrFields: {
+                    withCredentials: true
+            },
+            data: JSON.stringify(
+            {
+               "size": 0,
+               "aggs": {
+                  "1": {
+                     "terms": {
+                        "field": "roomName.keyword",
+                        "order": {
+                           "_term": "desc"
+                        }
+                     }
+                  }
+               }
+            }),
+            statusCode: {
+                    401: function () {
+                            window.location.replace('/login');
+                    }
+            },
+            success: function(data) {
+                $.each(data.aggregations[1].buckets, function(index, value){
+                    $('#dropdown').append($('<option>', { 
+                        value: value.key,
+                        text : value.key 
+                    }));
+                });
+            }
+        });
     }
 	
 	function getChartData(totalDays){
@@ -127,33 +170,17 @@
 	}
         
 	$('#dropdown').on('change', function(){
-		var value = this.value;
-		switch(value){
-			case "Average":
-				chartSelection = "Average";
-				plotChart(totalWeatherDays);
-				break;
-			case "Kitchen":
-				chartSelection = "Kitchen";
-				plotChart(totalWeatherDays - 1);
-				break;
-			case "Bedroom":
-				chartSelection = "Bedroom";
-				plotChart(totalWeatherDays - 2);
-				break;
-			case "Lounge":
-				chartSelection = "Lounge";
-				plotChart(totalWeatherDays - 3);
-				break;
-			default:
-				alert("choice is not supported");
-				break;
-		}
+            var value = this.value;
+            chartSelection = value;
+            plotChart(totalWeatherDays);
 	});
         
 	//Get data on page load
 	getWeatherHourly();
 	
+        // Populate dynamic dropdown
+        getRoomsAndPopulateToDropDown();
+        
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getWeatherHourly(); }, 3600000);
 })(jQuery);
