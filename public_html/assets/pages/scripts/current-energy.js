@@ -5,7 +5,7 @@
 	var humidityBadgeJson = null;
 	var powerGraphJson = null;
 	var totalDays = 0;
-	var chartSelection = "Average";
+	var chartSelection = "Total";
 	
 	function getPowerHourly() {
         $.ajax({
@@ -25,12 +25,12 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
 			hourlyPowerJson = data;
-			console.log(hourlyPowerJson);
+			//console.log(hourlyPowerJson);
 			var totalPowerMonths = hourlyPowerJson.aggregations.per_month.buckets.length;
 			var totalPowerDays = hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets.length;
 			updatePowerElements(totalPowerMonths, totalPowerDays);
@@ -56,12 +56,12 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
 			temperatureBadgeJson = data;
-			console.log(temperatureBadgeJson);
+			//console.log(temperatureBadgeJson);
 			updateTemperatureBadge();
 		}
 		});
@@ -85,18 +85,19 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
 			humidityBadgeJson = data;
-			console.log(humidityBadgeJson);
+			//console.log(humidityBadgeJson);
 			updateHumidityBadge();
 		}
 		});
     }
 	
 	function getPowerGraph() {
+        var deviceName = "deviceName: " + "\"" + chartSelection + "\""; 
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -110,22 +111,22 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":"deviceName: \"Total\""}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query": deviceName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
 			powerGraphJson = data;
-			console.log(powerGraphJson);
+			//console.log(powerGraphJson);
 			totalDays = powerGraphJson.aggregations.per_day.buckets.length;
 			plotChart(totalDays);
 		}
 		});
     }
-	
+    
 	function updatePowerElements(totalPowerMonths, totalPowerDays) {
 		var currentEnergyValue = 		hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets[totalPowerDays-1].daily_total.value;
 		var previousDayEnergyValue = 	hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets[totalPowerDays-2].daily_total.value;
@@ -252,22 +253,30 @@
 	$('#dropdown').on('change', function(){
 		var value = this.value;
 		switch(value){
-			case "Average":
-				chartSelection = "Average";
-				plotChart(totalDays);
+			case "Total":
+				chartSelection = "Total";
+				getPowerGraph();
 				break;
-			case "Fridge":
-				chartSelection = "Fridge";
-				plotChart(totalDays - 1);
+			case "Toaster":
+				chartSelection = "Toaster";
+				getPowerGraph();
 				break;
-			case "Playstation":
-				chartSelection = "Playstation";
-				plotChart(totalDays - 4);
+			case "TV":
+				chartSelection = "TV";
+				getPowerGraph();
 				break;
-			case "AirConditioner":
-				chartSelection = "AirConditioner";
-				plotChart(totalDays - 5);
+			case "Oven":
+				chartSelection = "Oven";
+				getPowerGraph();
 				break;
+                        case "Kettle":
+                                chartSelection = "Kettle";
+				getPowerGraph();
+                                break;
+                        case "HomeEntertainment":
+                                chartSelection = "HomeEntertainment";
+				getPowerGraph();
+                                break;
 			default:
 				alert("choice is not supported");
 				break;
@@ -279,7 +288,8 @@
 	getLatestTemperature();
 	getLatestHumidity();
 	getPowerGraph();
-	
+	getTest();
+        
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);
 	setInterval(function(){ getPowerGraph(); }, 3600000);

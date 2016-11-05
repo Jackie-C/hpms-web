@@ -5,7 +5,7 @@
 	var humidityBadgeJson = null;
 	var powerGraphJson = null;
 	var totalDays = 0;
-	var chartSelection = "Average";
+	var chartSelection = "Total";
 	
 	function getPowerHourly() {
         $.ajax({
@@ -25,7 +25,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
@@ -56,7 +56,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
@@ -85,7 +85,7 @@
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
@@ -97,6 +97,7 @@
     }
 	
 	function getPowerGraph() {
+        var deviceName = "deviceName: " + "\"" + chartSelection + "\""; 
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -110,11 +111,11 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":"deviceName: \"Total\""}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":deviceName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
 		),
 		statusCode: {
 			401: function () {
-				window.location.replace('/login')
+				window.location.replace('/login');
 			}
 		},
 		success: function(data) {
@@ -251,22 +252,30 @@
 	$('#dropdown').on('change', function(){
 		var value = this.value;
 		switch(value){
-			case "Average":
-				chartSelection = "Average";
-				plotChart(totalDays);
+			case "Total":
+				chartSelection = "Total";
+				getPowerGraph();
 				break;
-			case "Fridge":
-				chartSelection = "Fridge";
-				plotChart(totalDays - 3);
+			case "Toaster":
+				chartSelection = "Toaster";
+				getPowerGraph();
 				break;
-			case "Playstation":
-				chartSelection = "Playstation";
-				plotChart(totalDays - 4);
+			case "TV":
+				chartSelection = "TV";
+				getPowerGraph();
 				break;
-			case "AirConditioner":
-				chartSelection = "AirConditioner";
-				plotChart(totalDays - 5);
+			case "Oven":
+				chartSelection = "Oven";
+				getPowerGraph();
 				break;
+                        case "Kettle":
+                                chartSelection = "Kettle";
+				getPowerGraph();
+                                break;
+                        case "HomeEntertainment":
+                                chartSelection = "HomeEntertainment";
+				getPowerGraph();
+                                break;
 			default:
 				alert("choice is not supported");
 				break;
