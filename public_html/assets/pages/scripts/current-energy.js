@@ -61,7 +61,7 @@
 		},
 		success: function(data) {
 			temperatureBadgeJson = data;
-			//console.log(temperatureBadgeJson);
+			console.log(temperatureBadgeJson);
 			updateTemperatureBadge();
 		}
 		});
@@ -90,14 +90,14 @@
 		},
 		success: function(data) {
 			humidityBadgeJson = data;
-			//console.log(humidityBadgeJson);
+			console.log(humidityBadgeJson);
 			updateHumidityBadge();
 		}
 		});
     }
 	
 	function getPowerGraph() {
-        var deviceName = "deviceName: " + "\"" + chartSelection + "\""; 
+        var deviceName = "deviceName: " + "\"" + chartSelection + "\"";
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -111,7 +111,7 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query": deviceName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":deviceName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
 		),
 		statusCode: {
 			401: function () {
@@ -120,14 +120,14 @@
 		},
 		success: function(data) {
 			powerGraphJson = data;
-			//console.log(powerGraphJson);
+			console.log(powerGraphJson);
 			totalDays = powerGraphJson.aggregations.per_day.buckets.length;
 			plotChart(totalDays);
 		}
 		});
     }
     
-    function getSensorAndPopulateToDropDown() {
+    function getSensorsAndPopulateToDropDown() {
         $.ajax({
             url: apiURL + "/hms-homeuser1-*/_search",
             type: "POST",
@@ -141,19 +141,8 @@
                     withCredentials: true
             },
             data: JSON.stringify(
-            {
-                "size": 0,
-                "aggs": {
-                   "1": {
-                      "terms": {
-                         "field": "deviceName.keyword",
-                         "order": {
-                            "_term": "desc"
-                         }
-                      }
-                   }
-                }
-            }),
+            {"size":0,"aggs":{"1":{"terms":{"field":"deviceName.keyword","order":{"_term":"desc"}}}}}
+			),
             statusCode: {
                     401: function () {
                             window.location.replace('/login');
@@ -304,7 +293,7 @@
 	getLatestTemperature();
 	getLatestHumidity();
 	getPowerGraph();
-	getSensorAndPopulateToDropDown();
+	getSensorsAndPopulateToDropDown();
         
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);

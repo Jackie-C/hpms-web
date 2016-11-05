@@ -2,9 +2,10 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
 	var totalWeatherDays = 0;
-	var chartSelection = "Total";
+	var chartSelection = "Office";
 	
 	function getWeatherHourly() {
+		var roomName = "roomName: " + "\"" + chartSelection + "\"";
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -18,7 +19,7 @@
 			withCredentials: true
 		},
 		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}}
+		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":roomName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}}}
 		),
 		statusCode: {
 			401: function () {
@@ -27,7 +28,7 @@
 		},
 		success: function(data) {
 			weatherJsonObject1 = data;
-			//console.log(weatherJsonObject1);
+			console.log(weatherJsonObject1);
 			totalWeatherDays = weatherJsonObject1.aggregations.per_day.buckets.length;
 			plotChart(totalWeatherDays);
 		}
@@ -48,19 +49,8 @@
                     withCredentials: true
             },
             data: JSON.stringify(
-            {
-               "size": 0,
-               "aggs": {
-                  "1": {
-                     "terms": {
-                        "field": "roomName.keyword",
-                        "order": {
-                           "_term": "desc"
-                        }
-                     }
-                  }
-               }
-            }),
+            {"size":0,"aggs":{"1":{"terms":{"field":"roomName.keyword","order":{"_term":"desc"}}}}}
+			),
             statusCode: {
                     401: function () {
                             window.location.replace('/login');
@@ -172,15 +162,15 @@
 	$('#dropdown').on('change', function(){
             var value = this.value;
             chartSelection = value;
-            plotChart(totalWeatherDays);
+            getWeatherHourly();
 	});
         
 	//Get data on page load
 	getWeatherHourly();
-        
-        // Add drop down options
+	
+    // Populate dynamic dropdown
 	getRoomsAndPopulateToDropDown();
-        
+	   
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getWeatherHourly(); }, 3600000);
 })(jQuery);

@@ -31,7 +31,7 @@
 		},
 		success: function(data) {
 			hourlyPowerJson = data;
-			console.log(hourlyPowerJson);
+			//console.log(hourlyPowerJson);
 			var totalMonths = hourlyPowerJson.aggregations.per_month.buckets.length;
 			var totalDays = hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets.length;
 			updatePowerElements(totalMonths, totalDays);
@@ -120,7 +120,7 @@
 		},
 		success: function(data) {
 			powerGraphJson = data;
-			console.log(powerGraphJson);
+			//console.log(powerGraphJson);
 			plotChart("Energy");
 		}
 		});
@@ -149,7 +149,7 @@
 		},
 		success: function(data) {
 			weatherGraphJson = data;
-			console.log(weatherGraphJson);
+			//console.log(weatherGraphJson);
 		}
 		});
     }

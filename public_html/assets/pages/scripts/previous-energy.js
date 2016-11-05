@@ -30,7 +30,7 @@
 		},
 		success: function(data) {
 			hourlyPowerJson = data;
-			console.log(hourlyPowerJson);
+			//console.log(hourlyPowerJson);
 			var totalPowerMonths = hourlyPowerJson.aggregations.per_month.buckets.length;
 			var totalPowerDays = hourlyPowerJson.aggregations.per_month.buckets[totalPowerMonths-1].per_day.buckets.length;
 			updatePowerElements(totalPowerMonths, totalPowerDays);
@@ -97,7 +97,7 @@
     }
 	
 	function getPowerGraph() {
-        var deviceName = "deviceName: " + "\"" + chartSelection + "\""; 
+        var deviceName = "deviceName: " + "\"" + chartSelection + "\"";
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -127,7 +127,7 @@
 		});
     }
     
-    function getSensorAndPopulateToDropDown() {
+    function getSensorsAndPopulateToDropDown() {
         $.ajax({
             url: apiURL + "/hms-homeuser1-*/_search",
             type: "POST",
@@ -141,19 +141,8 @@
                     withCredentials: true
             },
             data: JSON.stringify(
-            {
-                "size": 0,
-                "aggs": {
-                   "1": {
-                      "terms": {
-                         "field": "deviceName.keyword",
-                         "order": {
-                            "_term": "desc"
-                         }
-                      }
-                   }
-                }
-            }),
+            {"size":0,"aggs":{"1":{"terms":{"field":"deviceName.keyword","order":{"_term":"desc"}}}}}
+			),
             statusCode: {
                     401: function () {
                             window.location.replace('/login');
@@ -303,9 +292,7 @@
 	getLatestTemperature();
 	getLatestHumidity();
 	getPowerGraph();
-        
-        getSensorAndPopulateToDropDown();
-
+	getSensorsAndPopulateToDropDown();
 	
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);

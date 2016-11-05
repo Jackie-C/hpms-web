@@ -27,7 +27,7 @@
 		},
 		success: function(data) {
 			hourlyPowerJson = data;
-			console.log(hourlyPowerJson);
+			//console.log(hourlyPowerJson);
 			var totalMonths = hourlyPowerJson.aggregations.per_month.buckets.length;
 			var totalDays = hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets.length;
 			updatePowerElements(totalMonths, totalDays);
