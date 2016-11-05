@@ -1,14 +1,17 @@
 (function($) {
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
-	var totalWeatherDays = 0;
 	var chartSelection = "Total";
 	
 	function getWeatherHourly() {
             var roomName = "roomName: " + "\"" + chartSelection + "\"";
-            var query = JSON.stringify({"size":"0","query":{"bool":{"must":[{"query_string":{"query":roomName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}}});
+            var query = JSON.stringify(
+			{"size":"0","query":{"bool":{"must":[{"query_string":{"query":roomName}},{"range":{"timestamp":{"gte":"now-1d","to":"now"}}}]}},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}
+			);
             if (chartSelection === "Total"){
-                query = JSON.stringify({"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}});
+                query = JSON.stringify(
+				{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-1d","to":"now"}}}]}},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}
+				);
             }
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
@@ -31,8 +34,8 @@
 		success: function(data) {
 			weatherJsonObject1 = data;
 			console.log(weatherJsonObject1);
-			totalWeatherDays = weatherJsonObject1.aggregations.per_day.buckets.length;
-			plotChart(totalWeatherDays);
+			var totalHours = weatherJsonObject1.aggregations.per_hour.buckets.length;
+			plotChart(totalHours);
 		}
 		});
     }
@@ -69,8 +72,8 @@
         });
     }
     
-	function getChartData(totalDays){
-		var currentDayBuckets = weatherJsonObject1.aggregations.per_day.buckets[totalDays-1];
+	function getChartData(totalHours){
+		var currentDayBuckets = weatherJsonObject1.aggregations;
 		var chartFormatted = new Array();
 		var highestUsageValue = 0;
 		var highestUsageTime;
@@ -114,9 +117,9 @@
 		return chartFormatted;
 	}
 	
-	function plotChart(totalDays){
+	function plotChart(totalHours){
 		var placeholder = $("#chart_4");
-		var data = getChartData(totalDays);
+		var data = getChartData(totalHours);
 		var dataset = [ { label: chartSelection + " Usage", data: data }];
 		var options = getChartOption(chartSelection);
                 changeTicksSizeOnMobile(options);

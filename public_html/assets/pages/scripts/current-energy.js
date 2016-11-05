@@ -121,7 +121,6 @@
 			powerGraphJson = data;
 			console.log(powerGraphJson);
 			var totalHours = powerGraphJson.aggregations.per_hour.buckets.length;
-			console.log(totalHours);
 			plotChart(totalHours);
 		}
 		});
