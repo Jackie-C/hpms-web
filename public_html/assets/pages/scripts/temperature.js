@@ -2,10 +2,14 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
 	var totalWeatherDays = 0;
-	var chartSelection = "Office";
+	var chartSelection = "Total";
 	
 	function getWeatherHourly() {
-		var roomName = "roomName: " + "\"" + chartSelection + "\"";
+            var roomName = "roomName: " + "\"" + chartSelection + "\"";
+            var query = JSON.stringify({"size":"0","query":{"bool":{"must":[{"query_string":{"query":roomName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}}});
+            if (chartSelection === "Total"){
+                query = JSON.stringify({"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}],"must_not":[{"range":{"timestamp":{"gte":"2016-09-26","lte":"2016-10-11"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}},"humidity":{"avg":{"field":"humidity"}}}}}}}});
+            }
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
 		type: "POST",
@@ -18,9 +22,7 @@
 		xhrFields: {
 			withCredentials: true
 		},
-		data: JSON.stringify(
-		{"size":"0","query":{"bool":{"must":[{"query_string":{"query":roomName}},{"range":{"timestamp":{"gte":"now-14d","to":"now"}}}]}},"aggs":{"per_day":{"date_histogram":{"field":"timestamp","interval":"day","format":"YYYY-MM-dd"},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"temperature":{"avg":{"field":"temperature"}}}}}}}}
-		),
+		data: query,
 		statusCode: {
 			401: function () {
 				window.location.replace('/login')
