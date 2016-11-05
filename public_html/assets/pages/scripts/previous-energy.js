@@ -282,6 +282,19 @@
         
 	$('#dropdown').on('change', function(){
             var value = this.value;
+            
+            switch(value){
+                case "TV":
+                    value = "Oven";
+                    break;
+                case "Toaster":
+                    value = "Home Entertainment";
+                    break;
+                case "Kettle":
+                    value = "Computer";
+                    break;
+            }
+            
             chartSelection = value;
             getPowerGraph();
 	});

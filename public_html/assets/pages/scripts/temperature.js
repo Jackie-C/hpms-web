@@ -166,6 +166,22 @@
         
 	$('#dropdown').on('change', function(){
             var value = this.value;
+            
+            switch(value){
+                case "Living Room":
+                    value = "Kitchen";
+                    break;
+                case "Household":
+                    value = "Bedroom";
+                    break;
+                case "Office":
+                    value = "Bedroom";
+                    break;
+                case "Lounge":
+                    value = "Kitchen";
+                    break;
+            }
+            
             chartSelection = value;
             getWeatherHourly();
 	});
@@ -173,7 +189,7 @@
 	//Get data on page load
 	getWeatherHourly();
 	
-    // Populate dynamic dropdown
+        // Populate dynamic dropdown
 	getRoomsAndPopulateToDropDown();
 	   
 	//Auto-refresh every 60 minutes

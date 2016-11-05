@@ -166,6 +166,22 @@
         
 	$('#dropdown').on('change', function(){
             var value = this.value;
+            
+             switch(value){
+                case "Living Room":
+                    value = "Kitchen";
+                    break;
+                case "Household":
+                    value = "Bedroom";
+                    break;
+                case "Office":
+                    value = "Bedroom";
+                    break;
+                case "Lounge":
+                    value = "Kitchen";
+                    break;
+            }
+            
             chartSelection = value;
             getWeatherHourly();
 	});
