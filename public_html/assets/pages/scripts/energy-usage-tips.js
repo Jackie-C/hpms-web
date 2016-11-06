@@ -20,7 +20,7 @@ jQuery(document).ready(function () {
         'Shut doors to areas you are not using to save on your heating costs',
         'Shut your curtains during heat waves to save on your air conditioning costs',
         'Every degree above 20 degrees adds 10% to your heating bill',
-        'Roof insulation makes a massive to your energy bills',
+        'Roof insulation makes a big impact to your energy bills',
         'Cleaning the lint filter on your dryer reduces drying time and saves energy',
         'Power saving globes consume 80% less energy than conventional globes',
         'In you only need a small amount of light, use a lamp or spotlight instead of the main lights'
