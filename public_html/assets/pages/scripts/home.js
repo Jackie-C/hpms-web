@@ -5,6 +5,7 @@
 	var humidityBadgeJson = null;
 	var powerGraphJson = null;
 	var weatherGraphJson = null;
+	var largestConsumptionJson = null;
 	var chartSelection = null;
 	var plot = null;
 
@@ -154,11 +155,42 @@
 		});
     }
 	
+	function getLargestConsumption() {
+        $.ajax({
+		url: apiURL + "/hms-homeuser1-*/_search",
+		type: "POST",
+		contentType: "application/json; charset=UTF-8",
+		dataType: 'json',
+		headers: {
+			"kbn-version": "5.0.0-beta1",
+			"accept": "*/*"
+		},
+		xhrFields: {
+			withCredentials: true
+		},
+		data: JSON.stringify(
+		{"size":"0","query":{"bool":{"must":[{"range":{"timestamp":{"gte":"now-1h","to":"now"}}}],"must_not":[{"query_string":{"query":"deviceName: \"Total\""}}]}},"aggs":{"per_hour":{"date_histogram":{"field":"timestamp","interval":"hour"},"aggs":{"largest":{"terms":{"field":"deviceName.keyword","size":1,"order":{"power":"desc"}},"aggs":{"power":{"avg":{"script":{"inline":"doc['voltage'].value * doc['current'].value / 1000","lang":"expression"}}}}}}}}}
+		),
+		statusCode: {
+			401: function () {
+				window.location.replace('/login')
+			}
+		},
+		success: function(data) {
+			largestConsumptionJson = data;
+			//console.log(largestConsumptionJson);
+			var totalHours = largestConsumptionJson.aggregations.per_hour.buckets.length;
+			updateLargestConsumption(totalHours);
+		}
+		});
+    }
+	
 	function updatePowerElements(totalMonths, totalDays) {
 		var currentEnergyValue = 		hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets[totalDays-1].daily_total.value;
 		var previousDayEnergyValue = 	hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets[totalDays-2].daily_total.value;
 		var currentCostValue = 			hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].per_day.buckets[totalDays-1].daily_total_cost.value;
 		var monthlyCostValue = 			hourlyPowerJson.aggregations.per_month.buckets[totalMonths-1].monthly_total_cost.value;
+		var lastMonthCostValue = 		hourlyPowerJson.aggregations.per_month.buckets[totalMonths-2].monthly_total_cost.value;
 		
 		if (currentEnergyValue === null) {
 			$("#currentEnergyUsage").text("Sensor Error");
@@ -187,6 +219,12 @@
 		} else {
 			$("#monthlyRunningTotal").text("$ " + Math.round10(monthlyCostValue, -2).toFixed(2));
 		}
+		
+		if (monthlyCostValue === null || lastMonthCostValue === null) {
+			$("#changeMonthlyConsumption").text("Sensor Error");
+		} else {
+			$("#changeMonthlyConsumption").text(Math.round(((Math.round10(monthlyCostValue, -1) - Math.round10(lastMonthCostValue, -1)) / Math.round10(lastMonthCostValue, -1)) * 100) + " %");
+		}
 	}
 	
 	function updateTemperatureBadge() {
@@ -213,9 +251,9 @@
 		}
 	}
 	
-	function updateHardcodeElements() {
-		$("#changeMonthlyConsumption").text("50 %");
-		$("#largestConsumption").text("Television");
+	function updateLargestConsumption(totalHours) {
+		var largestConsumption = largestConsumptionJson.aggregations.per_hour.buckets[totalHours-1].largest.buckets[0].key;
+		$("#largestConsumption").text(largestConsumption);
 	}
         
 	function getChartData(category) {
@@ -317,12 +355,13 @@
 	getLatestHumidity();
 	getPowerGraph();
 	getWeatherGraph();
-	updateHardcodeElements();
+	getLargestConsumption();
 	
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getPowerHourly(); }, 3600000);
 	setInterval(function(){ getPowerGraph(); }, 3600000);
 	setInterval(function(){ getWeatherGraph(); }, 3600000);
+	setInterval(function(){ getLargestConsumption(); }, 3600000);
 	
 	//Auto-refresh every 60 seconds
 	setInterval(function(){ getLatestTemperature(); }, 60000);
