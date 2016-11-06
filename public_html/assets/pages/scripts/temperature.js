@@ -2,7 +2,7 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
 	var chartSelection = "Total";
-	
+
 	function getWeatherHourly() {
             var roomName = "roomName: " + "\"" + chartSelection + "\"";
             var query = JSON.stringify(
@@ -39,7 +39,7 @@
 		}
 		});
     }
-    
+
     function getRoomsAndPopulateToDropDown() {
         $.ajax({
             url: apiURL + "/hms-homeuser1-*/_search",
@@ -63,15 +63,15 @@
             },
             success: function(data) {
                 $.each(data.aggregations[1].buckets, function(index, value){
-                    $('#dropdown').append($('<option>', { 
+                    $('#dropdown').append($('<option>', {
                         value: value.key,
-                        text : value.key 
+                        text : value.key
                     }));
                 });
             }
         });
     }
-    
+
 	function getChartData(totalHours){
 		var currentDayBuckets = weatherJsonObject1.aggregations;
 		var chartFormatted = new Array();
@@ -85,13 +85,13 @@
 			perHourData.push(value.key);
 			perHourData.push(value.temperature.value);
 			chartFormatted.push(perHourData);
-			
+
 			// find highest temperature and time
 			if (highestUsageValue < value.temperature.value){
 				highestUsageValue = value.temperature.value;
 				highestUsageTime = value.key;
 			}
-			
+
 			// find lowest temperature and time
 			if (lowestUsageValue === 0){
 				lowestUsageValue = value.temperature.value;
@@ -101,7 +101,7 @@
 				lowestUsageTime = value.key;
 			}
 		});
-		
+
 		var peakUsageDateTime = new Date(highestUsageTime);
 		var lowestUsageDateTime = new Date (lowestUsageTime);
 		if (highestUsageValue === 0) {
@@ -116,16 +116,16 @@
 		}
 		return chartFormatted;
 	}
-	
+
 	function plotChart(totalHours){
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalHours);
-		var dataset = [ { label: chartSelection + " Usage", data: data }];
+		var dataset = [ { label: chartSelection + " Temperature", data: data }];
 		var options = getChartOption(chartSelection);
                 changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
-        
+
         // to prevent overlapping of x-axis labels.
          // 415 is to handle iphone 6 plus or nexus 5X
         function changeTicksSizeOnMobile(options){
@@ -133,12 +133,12 @@
                 options.xaxis.ticks = 3;
             }
         }
-	
+
 	function getChartOption(category){
 		return options = {
 		series: {
-			lines: { 
-				show: true, 
+			lines: {
+				show: true,
 				fill: true,
 				fillColor: 'rgba(22, 192, 192, 0.4)'
 			},
@@ -163,10 +163,10 @@
 			}]
 		};
 	}
-        
+
 	$('#dropdown').on('change', function(){
             var value = this.value;
-            
+
             switch(value){
                 case "Living Room":
                     value = "Kitchen";
@@ -181,17 +181,17 @@
                     value = "Kitchen";
                     break;
             }
-            
+
             chartSelection = value;
             getWeatherHourly();
 	});
-        
+
 	//Get data on page load
 	getWeatherHourly();
-	
+
         // Populate dynamic dropdown
 	getRoomsAndPopulateToDropDown();
-	   
+
 	//Auto-refresh every 60 minutes
 	setInterval(function(){ getWeatherHourly(); }, 3600000);
 })(jQuery);
