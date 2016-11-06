@@ -266,14 +266,14 @@
 		if (chartSelection === null){
 			var placeholder = $("#chart_poc");
 			var data = getChartData(category.toLowerCase());
-			var dataset = [ { label: category + " Usage", data: data }];
+			var dataset = [ { label: category, data: data }];
 			var options = getChartOption(category.toLowerCase());
                         changeTicksSizeOnMobile(options);
 			plot = $.plot(placeholder, dataset, options);
 		} else {
 			var placeholder = $("#chart_poc");
 			var data = getChartData(chartSelection.toLowerCase());
-			var dataset = [ { label: chartSelection + " Usage", data: data }];
+			var dataset = [ { label: chartSelection, data: data }];
 			var options = getChartOption(chartSelection.toLowerCase());
                         changeTicksSizeOnMobile(options);
 			plot = $.plot(placeholder, dataset, options);
