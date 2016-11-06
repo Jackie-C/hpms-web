@@ -10,3 +10,11 @@
   background-color: transparent; !important;
   cursor: auto;
 }
+
+@media only screen and (max-width:767px){
+  .mobileScroll {
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+}
