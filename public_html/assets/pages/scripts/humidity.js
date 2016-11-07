@@ -2,7 +2,7 @@
 	var apiURL = "https://www.hms-portal.net/kibana/elasticsearch";
 	var weatherJsonObject1 = null;
 	var chartSelection = "Total";
-
+        var yLabel = chartSelection;
 	function getWeatherHourly() {
             var roomName = "roomName: " + "\"" + chartSelection + "\"";
             var query = JSON.stringify(
@@ -121,7 +121,7 @@
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalHours);
 		var dataset = [ { label: chartSelection + " Humidity", data: data }];
-		var options = getChartOption(chartSelection);
+		var options = getChartOption(yLabel);
 		changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
@@ -166,7 +166,7 @@
 
 	$('#dropdown').on('change', function(){
             var value = this.value;
-
+            yLabel = value;
              switch(value){
                 case "Living Room":
                     value = "Kitchen";

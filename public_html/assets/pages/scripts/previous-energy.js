@@ -5,7 +5,8 @@
 	var humidityBadgeJson = null;
 	var powerGraphJson = null;
 	var chartSelection = "Total";
-	
+        var yLabel = chartSelection;
+
 	function getPowerHourly() {
         $.ajax({
 		url: apiURL + "/hms-homeuser1-*/_search",
@@ -237,7 +238,7 @@
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalHours);
 		var dataset = [ { label: chartSelection + " Usage", data: data }];
-		var options = getChartOption(chartSelection);
+		var options = getChartOption(yLabel);
 		changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
 	}
@@ -282,7 +283,7 @@
         
 	$('#dropdown').on('change', function(){
             var value = this.value;
-            
+            yLabel = value;
             switch(value){
                 case "TV":
                     value = "Oven";
