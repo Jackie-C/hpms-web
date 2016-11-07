@@ -121,7 +121,7 @@
 	function plotChart(totalHours){
 		var placeholder = $("#chart_4");
 		var data = getChartData(totalHours);
-		var dataset = [ { label: chartSelection + " Temperature", data: data }];
+		var dataset = [ { label: yLabel + " Temperature", data: data }];
 		var options = getChartOption(yLabel);
                 changeTicksSizeOnMobile(options);
 		$.plot(placeholder, dataset, options);
